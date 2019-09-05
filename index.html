@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="Sprite.js"></script>
+    <script src="Vetor.js"></script>
+    <script src="Projectile.js"></script>
+    <script src="Char.js"></script>
+    <script src="Arma.js"></script>
+    <script src="Skill.js"></script>
+    <title>Semana 03</title>
+</head>
+<body>
+    <canvas />
+    <script>
+        var canvas = document.querySelector("canvas");
+        canvas.width = 600;
+        canvas.height = 300;
+        //canvas.width = window.innerWidth;
+        //canvas.height = window.innerHeight;
+        canvas.style.cursor = "none"
+        var ctx = canvas.getContext("2d");
+        dt = 0;
+        var t0 = dt;
+        var pc = new Char({y:200, x:200, color:"rgb(255,0,255)"});
+        var NNPC = 0;
+        var npc = [NNPC];
+        var pontos = 3;
+        var tiros = [];
+
+        var mouse = {
+            x: 0,
+            y: 0
+        }
+        var teclas = {
+            cima: 0,
+            baixo: 0,
+            esquerda: 0,
+            direita: 0,
+            espaco: 0,
+            last: 0,
+            mb1: 0,
+            shift: 0,
+        }
+        var dash = {
+            
+        }
+
+        for(i=0; i < NNPC; i++);
+            //npc[i] = new Sprite({x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx:Math.random()*100, vy: Math.random()*1000, color: "rgb(" + Math.random()*255 + ", 0, 0)"});
+        
+        function passo(t){
+            dt = (t - t0)/1000
+            ctx.fillStyle = "tan";
+            ctx.fillRect(0,0,canvas.width, canvas.height);
+            
+            pc.controlePorTeclas({teclas:teclas}, tiros)
+            pc.mover(dt, mouse);
+            pc.desenhar(ctx);
+
+            ctx.fillStyle = "red";
+            ctx.fillRect(mouse.x, mouse.y, 5,5);
+            
+            for(i=tiros.length - 1; i > 0; i--){
+                tiros[i].mover(dt);
+                if(tiros[i].duration <= 0){
+                    tiros.splice(i, 1);
+                }
+                else{
+                    tiros[i].desenhar(ctx);
+                }
+            }
+            // for(i=0; i < npc.length; i++){
+            //     //Snpc[i].perseguir({alvo:pc});
+            //     npc[i].mover(dt);
+            // }
+            
+            
+            // for(i=0; i < NNPC; i++){
+            //     //npc[i].color = "rgb(" + pc.x/npc[i].x*255 + ", 0, " + pc.y/npc[i].y*255 + ")";
+            //     npc[i].desenhar(ctx);
+            //     if(pc.imune <= 0 && pc.colidiuCom(npc[i])){
+            //         //npc[i].x = Math.random()*canvas.width;
+            //         //npc[i].y = Math.random()*canvas.height;
+            //         pontos--;
+            //         pc.imune = 1;
+               
+            // }
+        //}
+            ctx.fillStyle = "dark yellow";
+            ctx.strokeStyle = "red";
+            ctx.font = "20px bold monospaced";
+            ctx.fillText(pontos, 10, 20);
+
+            t0 = t;
+            requestAnimationFrame(passo);
+        }
+        requestAnimationFrame(passo);
+        addEventListener("keydown", function(e){
+            switch (e.keyCode){
+                case 37:
+                case 65:
+                    if(!teclas.esquerda)
+                        teclas.last = "left";
+                
+                    teclas.esquerda = 1;
+                    //teclas.last = "left";
+                    break;
+                case 38:
+                case 87:
+                    if(!teclas.cima)
+                        teclas.lastY = "up";
+                    teclas.cima = 1;
+                    //teclas.last = "left";
+                    break;
+                case 39:
+                case 68:
+                    if(!teclas.direita)
+                        teclas.last = "right"
+                    teclas.direita = 1;
+                    //teclas.last = "right";
+                    break;
+                case 40:
+                case 83:
+                    if(!teclas.baixo)
+                        teclas.lastY = "down"
+                    teclas.baixo = 1;
+                    
+                    //teclas.last = "left";
+                    break;
+                case 32:
+                    teclas.espaco = 1
+                    break;
+                case 16:
+                    teclas.shift = 1;
+                    break;
+                default:
+                    break;
+            }
+        });
+        addEventListener("keyup", function(e){
+            switch (e.keyCode){
+                case 37:
+                case 65:
+                    teclas.esquerda = 0;
+                    break;
+                case 38:
+                case 87:
+                    teclas.cima = 0;
+                    break;
+                case 39:
+                case 68:
+                    teclas.direita = 0;
+                    break;
+                case 40:
+                case 83:
+                    teclas.baixo = 0;
+                    break;
+                case 32:
+                    teclas.espaco = 0;
+                    break;
+                case 16:
+                    teclas.shift = 0;
+                    break;
+                default:
+                    break;
+            }
+        });
+    canvas.addEventListener("mousemove", function (e) {
+            var rect = this.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+    });
+    addEventListener("mousedown", function (e){
+        teclas.mb1 = 1;
+        //console.log("hmmmmmmmmmmmmmmm")
+    });
+    addEventListener("mouseup", function (e){
+        teclas.mb1 = 0;
+    });
+    </script>
+</body>
+</html>

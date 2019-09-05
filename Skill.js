@@ -9,7 +9,7 @@ function Skill(exemplo){
         active = undefined,
         recovery = undefined,
         isTryingTo = false,
-        isAbleTo = false,
+        isAbleTo = true,
         desenhaActive = undefined,
         desenhaRecovery = undefined,
     } = exemplo;
@@ -26,15 +26,19 @@ function Skill(exemplo){
 }
 Skill.prototype.update = function(char, dt){
     if(this.onGoing <= 0 && this.onCooldown <= 0 && this.isTryingTo == true){
-        this.onGoing = this.duration
+        //console.log(this)
+        this.onGoing = this.duration;
+        console.log(this.onGoing);
         this.start(char);
     }
     else if(this.onGoing > 0){ //tryingTo n importa, pq tá no meio da skill, coolDown n importa pq ta no meio da skill
+        console.log("hmmn");
         this.onGoing -= dt;
         if(this.onGoing <= 0){
             this.onCooldown = this.cooldown;
         }
         this.active(char, dt);
+        
     }
     else if(this.onGoing <= 0 && this.onCooldown > 0){
         this.onCooldown -= dt;
@@ -64,4 +68,8 @@ Skill.prototype.desenhar = function(ctx, char, dt){
     else{
         ; 
     }
+}
+Skill.prototype.interrupt = function(){
+        this.onGoing = 0;
+        this.onCooldown = this.cooldown;
 }

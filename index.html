@@ -29,6 +29,7 @@
         var npc = [NNPC];
         var pontos = 3;
         var tiros = [];
+        var particulas = [];
 
         var mouse = {
             x: 0,
@@ -43,9 +44,7 @@
             last: 0,
             mb1: 0,
             shift: 0,
-        }
-        var dash = {
-            
+            r: 0,
         }
 
         for(i=0; i < NNPC; i++);
@@ -57,7 +56,7 @@
             ctx.fillRect(0,0,canvas.width, canvas.height);
             
             pc.controlePorTeclas({teclas:teclas}, tiros)
-            pc.mover(dt, mouse);
+            pc.mover(dt, mouse, tiros);
             pc.desenhar(ctx);
 
             ctx.fillStyle = "red";
@@ -70,6 +69,15 @@
                 }
                 else{
                     tiros[i].desenhar(ctx);
+                }
+            }
+            for(i=particulas.length - 1; i > 0; i--){
+                particulas[i].mover(dt);
+                if(particulas[i].duration <= 0){
+                    particulas.splice(i, 1);
+                }
+                else{
+                    particulas[i].desenhar(ctx);
                 }
             }
             // for(i=0; i < npc.length; i++){
@@ -136,6 +144,9 @@
                 case 16:
                     teclas.shift = 1;
                     break;
+                case 82:
+                    teclas.r = 1;
+                    break;
                 default:
                     break;
             }
@@ -163,6 +174,9 @@
                     break;
                 case 16:
                     teclas.shift = 0;
+                    break;
+                case 82:
+                    teclas.r = 0;
                     break;
                 default:
                     break;

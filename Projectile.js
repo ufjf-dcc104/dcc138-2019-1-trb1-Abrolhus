@@ -4,7 +4,7 @@ function Projectile(exemplo){
         y = 10,
         w = 10,
         h = 10,
-        duration = 0.5,
+        duration = 0.1,
         v = new Vetor(0,0, 0),
         color = "white",
     } = exemplo;

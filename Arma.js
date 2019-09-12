@@ -12,10 +12,11 @@ function Arma(exemplo){
         reloadTime = 1,
 
         rounds = 24,
+        maxRounds = 24,
         
         bulletSize = 5,
         bulletSpeed = 500,
-        bulletDuration = 2,
+        bulletDuration = 1,
         
         bulletColor = "white",
         color = "Black",
@@ -37,6 +38,7 @@ function Arma(exemplo){
     this.bulletColor = bulletColor;
     this.color = color;
     this.reloadingColor = reloadingColor;
+    this.maxRounds = maxRounds;
 
     this.dir = dir;
 
@@ -94,6 +96,8 @@ Arma.prototype.pullTheTrigger = function(tiros){
         ;
     }
 }
-
+Arma.prototype.recarregar = function(){
+    this.rounds = this.maxRounds;
+}
 
 

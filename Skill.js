@@ -7,11 +7,13 @@ function Skill(exemplo){
         onCooldown = 0,
         start = undefined,
         active = undefined,
+        end = function(char){ return; },
         recovery = undefined,
         isTryingTo = false,
         isAbleTo = true,
         desenhaActive = undefined,
         desenhaRecovery = undefined,
+
     } = exemplo;
     this.duration =  duration;
     this.cooldown = cooldown;
@@ -23,21 +25,24 @@ function Skill(exemplo){
     this.recovery = recovery;
     this.isTryingTo = isTryingTo;
     this.isAbleTo = isAbleTo;
+    this.desenhaActive = desenhaActive;
+    this.end = end;
+    
 }
 Skill.prototype.update = function(char, dt){
-    if(this.onGoing <= 0 && this.onCooldown <= 0 && this.isTryingTo == true){
+    if(this.onGoing <= 0 && this.onCooldown <= 0 && this.isTryingTo == true && this.isAbleTo == true){
         //console.log(this)
         this.onGoing = this.duration;
-        console.log(this.onGoing);
         this.start(char);
     }
     else if(this.onGoing > 0){ //tryingTo n importa, pq tá no meio da skill, coolDown n importa pq ta no meio da skill
-        console.log("hmmn");
         this.onGoing -= dt;
+        this.active(char, dt);
         if(this.onGoing <= 0){
             this.onCooldown = this.cooldown;
+            this.end(char);
         }
-        this.active(char, dt);
+        
         
     }
     else if(this.onGoing <= 0 && this.onCooldown > 0){
@@ -70,6 +75,9 @@ Skill.prototype.desenhar = function(ctx, char, dt){
     }
 }
 Skill.prototype.interrupt = function(){
+    if(this.onGoing > 0){
         this.onGoing = 0;
         this.onCooldown = this.cooldown;
+    }
+        
 }

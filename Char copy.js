@@ -28,19 +28,16 @@ function Char(exemplo){
                 //char.v.mod = 5*char.vMax;
                 char.vModifier = 5;
                 char.v.mod = char.vMax*char.vModifier;
+                console.log(char.v.mod)
+                console.log(char.vModifier);
+                if(this.onGoing <= 0){
+                    char.vModifier = 1;
+                    console.log(this.onGoing);
+                }
 
-                //cria rasto    
-                char.rastro(dt, particulas);
-                
-            },
-            end: function(char){
-                char.vModifier = 1;
             },
             recovery: function(char, dt){
                 return;
-            },
-            desenhaActive: function(char, dt, particulas){
-                
             },
             duration: 0.04,
             cooldown: 1,
@@ -59,12 +56,12 @@ function Char(exemplo){
                 }
             },
             active: function(char, dt){
-                char.vModifier = 0.25;
-            },
-            end: function(char){
-                char.arma.recarregar();
-                char.vModifier = 1;
-                console.log("recarregando");
+                char.vModifier *= (1 - 10*dt);
+                if(this.onGoing <= 0){
+                    char.arma.recarregar();
+                    char.vModifier = 1;
+                    console.log("recarregando");
+                }
             },
             recovery: function(char, dt){
                 return;
@@ -97,11 +94,11 @@ function Char(exemplo){
                 }
                 },
             active: function(char, dt){
-                char.vModifier = 0.5;
-            },
-            end: function(char){
-                char.arma.pullTheTrigger(tiros);
-                //char.vModifier = 1;
+                char.vModifier *= (1 - 5*dt);
+                if(this.onGoing <= 0){
+                    char.arma.pullTheTrigger(tiros);
+                    char.vModifier = 1;
+                }
             },
             recovery: function(char, dt){
                 return;
@@ -120,19 +117,18 @@ function Char(exemplo){
                 // }
                 },
             active: function(char, dt){
-                console.log(char.vModifier)
-                if(char.vModifier != 1){
-                    char.estabilizaVmodifier(1, dt, 10) //vai pra 1, num crescimento de 5 unidades por segundo; Ou seja, em 0.2 segundos vira 1
-                }
                 //console.log("andando");
-                //char.vModifier = 1;
+                char.vModifier = 1;
                 char.a.x = char.walkDir.x;
                 char.a.y = char.walkDir.y;
                 char.a.mod = char.aMax;
+                if(this.onGoing <= 0){
+                    char.a.mod = 0;
+                    char.vModifier = 1;
+                }
             },
-            end: function(char){
-                char.a.mod = 0;
-                //char.vModifier = 1;
+            end = function(char){
+                
             },
             recovery: function(char, dt){
                 return;
@@ -238,8 +234,8 @@ Char.prototype.controlePorTeclas = function(opcoes, tiros){
         this.recarregar.isTryingTo = false;
     }
 }
-Char.prototype.mover = function(dt, mouse, particulas){
-    //this.rastro(dt, particulas);
+Char.prototype.mover = function(dt, mouse){
+
     this.checkPrecedenciaSkills();
     if(this.andar.isTryingTo == true){
         //console.log("tentando andar")
@@ -367,8 +363,7 @@ Char.prototype.desenhar = function(ctx){
         this.recarregar.desenhaActive(ctx, this);
     }
     if(this.dash.onGoing > 0){
-        ctx.fillStyle= "blue";
-        //this.dash.desenhaActive(this, dt, particulas)    
+        ctx.fillStyle= "blue";    
     } 
     else if(this.dash.onCooldown > 0){
         ctx.fillStyle= "purple";    
@@ -384,39 +379,4 @@ Char.prototype.desenhar = function(ctx){
     
     ctx.fillStyle = "red";
     ctx.fillText(this.arma.rounds, canvas.width - 40, canvas.height - 30, 35);
-}
-Char.prototype.rastro = function(dt, particulas){
-    var rastro = new Projectile({w: this.w, h: this.h, x: this.x, y: this.y, color: "rgb(0,0, 255, 0.3"});
-    particulas.push(rastro);
-    rastro = null;
-}
-Char.prototype.estabilizaVmodifier = function(goal, dt, rate){
-    var crescimento = goal - this.vModifier
-    if(this.vModifier == goal){
-        console.log("IGUAAL")
-        return;
-    }
-    
-    if(crescimento > 0){
-        this.vModifier += rate*dt;
-        //console.log("a2:")
-        //console.log(goal) 
-        console.log(this.vModifier);
-        if(this.vModifier >= goal){
-            this.vModifier = goal;
-            console.log("hmmm")
-            return;
-        }
-        
-    }
-    else if(crescimento < 0){
-        this.vModifier -= rate*dt
-        if(this.vModifier <= goal){
-            this.vModifier = goal;
-            return;
-        }
-        
-    }
-    
-        
 }

@@ -59,7 +59,9 @@ function Char(exemplo){
                 }
             },
             active: function(char, dt){
-                char.vModifier = 0.25;
+                if(char.vModifier != 0.25){
+                    char.estabilizaVmodifier(0.25, dt, 5)
+                }
             },
             end: function(char){
                 char.arma.recarregar();
@@ -97,7 +99,9 @@ function Char(exemplo){
                 }
                 },
             active: function(char, dt){
-                char.vModifier = 0.5;
+                if(char.vModifier != 0.5){
+                    char.estabilizaVmodifier(0.5, dt, 1)
+                }
             },
             end: function(char){
                 char.arma.pullTheTrigger(tiros);

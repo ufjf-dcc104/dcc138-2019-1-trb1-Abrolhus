@@ -50,7 +50,7 @@ function Char(exemplo){
         walkDir = new Vetor(1,0,1),
         recarregar = new Skill({
             start: function(char, dt){
-                if(char.arma.rounds == 54){
+                if(char.arma.rounds == 220){
                     this.interrupt(); //força a entrada em cooldown
                 }
                 else{
@@ -60,7 +60,7 @@ function Char(exemplo){
             },
             active: function(char, dt){
                 if(char.vModifier != 0.25){
-                    char.estabilizaVmodifier(0.25, dt, 5)
+                    char.estabilizaVmodifier(0.25, dt, 1)
                 }
             },
             end: function(char){
@@ -99,8 +99,9 @@ function Char(exemplo){
                 }
                 },
             active: function(char, dt){
-                if(char.vModifier != 0.5){
-                    char.estabilizaVmodifier(0.5, dt, 1)
+                if(char.vModifier != 0.1){
+                    char.estabilizaVmodifier(0.1, dt, 1);
+                    console.log(char.vModifier);
                 }
             },
             end: function(char){
@@ -124,11 +125,11 @@ function Char(exemplo){
                 // }
                 },
             active: function(char, dt){
-                console.log(char.vModifier)
-                if(char.vModifier != 1){
+                // console.log(char.vModifier)
+                if(char.vModifier != 1 && char.atirar.onGoing <= 0 && char.recarregar.onGoing <= 0){
+                    console.log("hmmmm")
                     char.estabilizaVmodifier(1, dt, 10) //vai pra 1, num crescimento de 5 unidades por segundo; Ou seja, em 0.2 segundos vira 1
                 }
-                //console.log("andando");
                 //char.vModifier = 1;
                 char.a.x = char.walkDir.x;
                 char.a.y = char.walkDir.y;
@@ -136,7 +137,6 @@ function Char(exemplo){
             },
             end: function(char){
                 char.a.mod = 0;
-                //char.vModifier = 1;
             },
             recovery: function(char, dt){
                 return;
@@ -147,42 +147,23 @@ function Char(exemplo){
 
     } = exemplo;
     Sprite.call(this, exemplo);
-    this.a = a
-    this.aMax = aMax,
-    this.vMax = vMax,
-    this.atrito = atrito,
-    this.fAtrito = fAtrito,
-    this.cat =1,
-    //this.atirando = 0;
-    this.imune = 0;
-    this.dir = dir;
-    // this.cooldown = 0.1; 
-    // this.spread = 0.1;
-    this.arma = arma;
-    this.speedState = 1;
-    this.dashing = 0;
-    this.dashDuration = 0.1;
-    this.dashOnCooldown = 0;
-    this.dashCooldown = 1;
-    this.tryingToDash = 0;
+    this.a = a; //aceleracao
+    this.aMax = aMax; 
+    this.vMax = vMax;
+    this.vModifier = 1; //Multiplicador de Velocidade, enquanto recarrega, por exemplo, esse multiplicador cai de 1 para 0.25
+    this.atrito = atrito;
+    this.fAtrito = fAtrito;
+    this.cat =1; //constante de atrito, nunca foi utilizado, mas deixei aqui.
+    
+    this.dir = dir; //direcao que o mouse aponta basicamente;
+    
     this.defautColor = this.color;
+    this.imune = 0;
+    this.walkDir = walkDir; //direção q o char tá caminhando para, basicamente a direção da aceleraçõa
 
-
-    this.tentandoAtirar = false;
-    this.tentandoDashar = false;
-    this.tentandoAndar = false;
-    this.tentandoRecarregar = false;
-
-    this.atirando = false;
-    this.dashando = false;
-    this.andando = false;
-    this.recarregando = false;
-
-    this.imune = false;
-
-    this.vModifier = 1;
-    this.walkDir = walkDir;
-
+    //Equipamento
+    this.arma = arma;
+    //Skills
     this.dash = dash;
     this.atirar = atirar;
     this.recarregar = recarregar;
@@ -243,7 +224,6 @@ Char.prototype.controlePorTeclas = function(opcoes, tiros){
     }
 }
 Char.prototype.mover = function(dt, mouse, particulas){
-    //this.rastro(dt, particulas);
     this.checkPrecedenciaSkills();
     if(this.andar.isTryingTo == true){
         //console.log("tentando andar")
@@ -260,18 +240,6 @@ Char.prototype.mover = function(dt, mouse, particulas){
         this.atrito.mod = 0;
         //console.log("vmod = 0");
     }
-    
-    // if(this.dash.onGoing > 0){
-    //     console.log(this.dash.onGoing )
-    //     this.dash.onGoing -= dt;
-    //     this.dash.active(this);
-    //     //this.dash.onGoing = 0;
-    //     this.dash.onCooldown = this.dash.cooldown;
-    // } else{
-    //     if(this.dash.onCooldown > 0){
-    //         this.dash.onCooldown -= dt;
-    //     }
-    // }
 
     this.x += this.v.x*this.v.mod*dt;
     this.y += this.v.y*this.v.mod*dt;
@@ -340,13 +308,6 @@ Char.prototype.atualizaAceleracao = function(){
     this.aResultante = this.a.returnAdd(this.atrito);
     //console.log(this.a)
 }
-// Char.prototype.atirar = function(tiros){
-//     console.log("hmmmn");
-//     if(this.dash.onGoing > 0)
-//         return;
-//     this.arma.pullTheTrigger(tiros);
-//     this.atirando = 1/this.arma.fireRate;
-// }
 Char.prototype.atualizaDir = function(mouse){
     this.dir = this.dir.vetorUnitario(mouse.x - this.x, mouse.y - this.y);
     //console.log(this.dir);
@@ -390,7 +351,7 @@ Char.prototype.desenhar = function(ctx){
     ctx.fillText(this.arma.rounds, canvas.width - 40, canvas.height - 30, 35);
 }
 Char.prototype.rastro = function(dt, particulas){
-    var rastro = new Projectile({w: this.w, h: this.h, x: this.x, y: this.y, color: "rgb(0,0, 255, 0.3"});
+    var rastro = new Projectile({w: this.w, h: this.h, x: this.x, y: this.y, color: "rgb(0,0, 255, 0.3", decayRate: 5});
     particulas.push(rastro);
     rastro = null;
 }
@@ -405,7 +366,6 @@ Char.prototype.estabilizaVmodifier = function(goal, dt, rate){
         this.vModifier += rate*dt;
         //console.log("a2:")
         //console.log(goal) 
-        console.log(this.vModifier);
         if(this.vModifier >= goal){
             this.vModifier = goal;
             console.log("hmmm")

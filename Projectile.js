@@ -7,6 +7,8 @@ function Projectile(exemplo){
         duration = 0.1,
         v = new Vetor(0,0, 0),
         color = "white",
+        decayRate = 0,
+        opacity = 1,
     } = exemplo;
     this.x = x;
     this.y = y;
@@ -14,6 +16,8 @@ function Projectile(exemplo){
     this.h = h;
     this.v = v;
     this.duration = duration;
+    this.decayRate = decayRate;
+    this.opacity = opacity;
 
     this.color = color;
 }
@@ -30,11 +34,13 @@ Projectile.prototype.desenhar = function(ctx){
     ctx.translate(this.x, this.y + this.h/2);
     ctx.rotate(Math.atan2( this.v.y, this.v.x)); // in the screenshot I used angle = 20
     ctx.fillStyle = this.color;
+    ctx.globalAlpha = this.opacity;
     ctx.fillRect(0,-this.h/2, this.w,this.h);
     //console.log("aBC")
     ctx.restore();
 }
 Projectile.prototype.mover = function(dt){
+    this.decay(dt);
     this.duration -= dt;
 
     this.x += this.v.x*this.v.mod*dt;
@@ -55,5 +61,12 @@ Projectile.prototype.colidiuCom = function(alvo){
 Projectile.prototype.perseguir = function(opcoes){
     this.vx = 20*Math.sign(opcoes.alvo.x-this.x);
     this.vy = 20*Math.sign(+ opcoes.alvo.y-this.y );
+}
+Projectile.prototype.decay = function(dt){
+    console.log(this.opacity)
+    this.opacity -= this.decayRate*dt; //meio meh pq ele pode ficar transparente antes da duração acabar, entao sei la, podia ter uma aceleracao no decaimento da opcacidade...
+    if(this.opacity < 0){
+        this.opacity = 0;
+    }
 }
 

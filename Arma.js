@@ -11,8 +11,11 @@ function Arma(exemplo){
         spread = 0.1,
         reloadTime = 1,
 
-        rounds = 24,
-        maxRounds = 24,
+        rounds = 220,
+        maxRounds = 220,
+        bulletsPerRound = 1,
+        bulletSpread = 0,
+
         
         bulletSize = 5,
         bulletSpeed = 500,
@@ -42,9 +45,6 @@ function Arma(exemplo){
 
     this.dir = dir;
 
-}
-Arma.prototype.fire = function(){
-    var tiro = Object.create(Sprite);
 }
 Arma.prototype.atualizaPosicao = function(char){
     this.x = char.x + char.w/2;

@@ -71,7 +71,7 @@ Projectile.prototype.decay = function(dt){
         this.opacity = 0;
     }
 }
-Projectile.prototype.rastro = function(times){
+Projectile.prototype.rastro = function(times, particulas){
     if(times == 0){
         return;
     }

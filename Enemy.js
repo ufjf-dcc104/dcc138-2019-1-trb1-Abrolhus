@@ -63,7 +63,7 @@ Enemy.prototype.manterDistancia = function(alvo){
 Enemy.prototype.enrage= function(){
 
 }
-Enemy.prototype.atirar = function(alvo){
+Enemy.prototype.atirar = function(alvo, tirosInimigos){
     var v = new Vetor(0,0,0)
     var dist = Math.hypot(alvo.y - this.y, alvo.x - this.x);
     v.x = (alvo.x - this.x)/dist;
@@ -83,14 +83,14 @@ Enemy.prototype.atirar = function(alvo){
     tirosInimigos.push(tiro);
     tiro = null;
 }
-Enemy.prototype.comportar = function(dt, alvo){
+Enemy.prototype.comportar = function(dt, alvo, tirosInimigos){
     this.onCooldown -= dt;
     if(this.tipo == "soldado"){
         this.perseguir(alvo)
     }
     else if(this.tipo == "mago"){
         if(this.onCooldown < 0){
-            this.atirar(alvo)
+            this.atirar(alvo, tirosInimigos)
             this.onCooldown = this.cooldown;
         }
         else{

@@ -9,7 +9,7 @@ function Char(exemplo){
         dir = new Vetor(0,0,0),
         arma = new Arma({rounds:50, maxRounds:50}),
         dash = new Skill({
-            start: function(char, dt){
+            start: function(char, dt, particulas, tiros){
                 
                 char.v.x = char.a.x;
                 char.v.y = char.a.y;
@@ -22,7 +22,7 @@ function Char(exemplo){
                     char.v.mod = char.vMax*char.vModifier;
                 }
             },
-            active: function(char, dt){
+            active: function(char, dt, particulas, tiros){
                 //char.v.mod = 5*char.vMax;
                 char.vModifier = 5;
                 char.v.mod = char.vMax*char.vModifier;
@@ -31,13 +31,13 @@ function Char(exemplo){
                 char.rastro(dt, particulas);
                 
             },
-            end: function(char){
+            end: function(char, dt, particulas, tiros){
                 char.vModifier = 1;
             },
-            recovery: function(char, dt){
+            recovery: function(char, dt, particulas, tiros){
                 return;
             },
-            desenhaActive: function(char, dt, particulas){
+            desenhaActive: function(char, dt, particulas, tiros){
                 
             },
             duration: 0.04,
@@ -56,12 +56,12 @@ function Char(exemplo){
                     console.log("recarregar");
                 }
             },
-            active: function(char, dt){
+            active: function(char, dt, particulas, tiros){
                 if(char.vModifier != 0.25){
                     char.estabilizaVmodifier(0.25, dt, 1)
                 }
             },
-            end: function(char){
+            end: function(char, dt, particulas, tiros){
                 char.arma.recarregar();
                 char.vModifier = 1;
                 console.log("recarregando");
@@ -88,7 +88,7 @@ function Char(exemplo){
             cooldown: 0.5,
         }),
         atirar = new Skill({
-            start: function(char, dt){
+            start: function(char, dt, particulas, tiros){
                 if(char.arma.rounds > 0){
                     char.arma.rounds--;
                 }
@@ -96,23 +96,23 @@ function Char(exemplo){
                     this.interrupt(); //força a entrada em cooldown
                 }
                 },
-            active: function(char, dt){
+            active: function(char, dt, particulas, tiros){
                 if(char.vModifier != 0.1){
                     char.estabilizaVmodifier(0.1, dt, 1);
                 }
             },
-            end: function(char){
+            end: function(char, dt, particulas, tiros){
                 char.arma.pullTheTrigger(tiros);
                 //char.vModifier = 1;
             },
-            recovery: function(char, dt){
+            recovery: function(char, dt, particulas, tiros){
                 return;
             },
             duration: 0.02,
             cooldown: 0.04 ,
         }),
         andar = new Skill({
-            start: function(char, dt){
+            start: function(char, dt, particulas, tiros){
                 // if(char.rounds > 0){
                 //     char.rounds--;
                 // }
@@ -121,7 +121,7 @@ function Char(exemplo){
                 //     this.onCooldown = this.cooldown; //força a entrada em cooldown
                 // }
                 },
-            active: function(char, dt){
+            active: function(char, dt, particulas, tiros){
                 if(char.vModifier != 1 && char.atirar.onGoing <= 0 && char.recarregar.onGoing <= 0){
                     
                     char.estabilizaVmodifier(1, dt, 10) //vai pra 1, num crescimento de 5 unidades por segundo; Ou seja, em 0.2 segundos vira 1
@@ -131,10 +131,10 @@ function Char(exemplo){
                 char.a.y = char.walkDir.y;
                 char.a.mod = char.aMax;
             },
-            end: function(char){
+            end: function(char, dt, particulas, tiros){
                 char.a.mod = 0;
             },
-            recovery: function(char, dt){
+            recovery: function(char, dt, particulas, tiros){
                 return;
             },
             duration: 0.04, //AQUI QUE TÀ O PROBLEMA, ANDAR N TEM DURAÇÂO TLG? OU TEM? SEI La
@@ -168,7 +168,7 @@ function Char(exemplo){
     this.hp  = 3;
 }
 Char.prototype = new Sprite({});
-Char.prototype.controlePorTeclas = function(opcoes, tiros){
+Char.prototype.controlePorTeclas = function(opcoes){
     var dirX = 0;
     var dirY = 0;
     var mod = 1;
@@ -220,12 +220,12 @@ Char.prototype.controlePorTeclas = function(opcoes, tiros){
         this.recarregar.isTryingTo = false;
     }
 }
-Char.prototype.mover = function(dt, mouse, particulas){
+Char.prototype.mover = function(dt, mouse, particulas, tiros){
     this.checkPrecedenciaSkills();
     if(this.andar.isTryingTo == true){
         //console.log("tentando andar")
     }
-    this.updateSkills(dt);
+    this.updateSkills(dt, particulas, tiros);
 
     this.atualizaDir(mouse);
     this.atualizaAtrito();
@@ -277,13 +277,13 @@ Char.prototype.checkPrecedenciaSkills = function(){
         this.dash.isAbleTo = true
     }
 }
-Char.prototype.updateSkills = function(dt){
+Char.prototype.updateSkills = function(dt, particulas, tiros){
     
-    this.dash.update(this, dt);
-    this.atirar.update(this, dt);
+    this.dash.update(this, dt, particulas, tiros);
+    this.atirar.update(this, dt, particulas, tiros);
     //console.log(this.andar.onGoing);
-    this.andar.update(this, dt);
-    this.recarregar.update(this, dt);
+    this.andar.update(this, dt, particulas, tiros);
+    this.recarregar.update(this, dt, particulas, tiros);
 
 }
 

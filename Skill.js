@@ -29,25 +29,26 @@ function Skill(exemplo){
     this.end = end;
     
 }
-Skill.prototype.update = function(char, dt){
+Skill.prototype.update = function(char, dt, particulas, tiros){
+    console.log(particulas);
     if(this.onGoing <= 0 && this.onCooldown <= 0 && this.isTryingTo == true && this.isAbleTo == true){
         //console.log(this)
         this.onGoing = this.duration;
-        this.start(char);
+        this.start(char, dt, particulas, tiros);
     }
     else if(this.onGoing > 0){ //tryingTo n importa, pq tá no meio da skill, coolDown n importa pq ta no meio da skill
         this.onGoing -= dt;
-        this.active(char, dt);
+        this.active(char, dt, particulas, tiros);
         if(this.onGoing <= 0){
             this.onCooldown = this.cooldown;
-            this.end(char);
+            this.end(char, dt, particulas, tiros);
         }
         
         
     }
     else if(this.onGoing <= 0 && this.onCooldown > 0){
         this.onCooldown -= dt;
-        this.recovery(char, dt);
+        this.recovery(char, dt, particulas);
     }
     else if(this.onGoing <= 0 && this.onCooldown > 0 && this.isTryingTo == true){
         ;
@@ -62,10 +63,10 @@ Skill.prototype.desenhar = function(ctx, char, dt){
     //     this.onGoing = this.duration
     // } else 
     if(this.onGoing > 0){ //tryingTo n importa, pq tá no meio da skill, coolDown n importa pq ta no meio da skill
-        this.desenhaActive(ctx, char, dt);
+        this.desenhaActive(ctx, char, dt, particulas);
     }
     else if(this.onGoing <= 0 && this.onCooldown > 0){
-        this.desenhaRecovery(ctx, char, dt);
+        this.desenhaRecovery(ctx, char, dt, particulas);
     }
     else if(this.onGoing <= 0 && this.onCooldown > 0 && this.isTryingTo == true){
         console.log("Tá no Cooldown"); //NUNCA VAI ENTRAR NESSE IF, esqueci;

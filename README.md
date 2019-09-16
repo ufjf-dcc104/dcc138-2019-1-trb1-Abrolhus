@@ -10,5 +10,5 @@ https://ufjf-dcc104.github.io/dcc138-2019-1-trb1-Abrolhus/index.html
 (MB1). Atira;<br />
 
 Objetivo: Eliminar todos os sprites inimigos.<br />
-O jogo não limita a movimentação do personagem, podendo sair da area visivel. Isso não altera o jogo em si mas será alterado futuramente. <br />
+O jogo não limita a movimentação do personagem, podendo sair da area visivel. Isso não altera o jogo em si mas será mudado futuramente. <br />
 

@@ -7,7 +7,7 @@ function Char(exemplo){
         fAtrito = 300,
         cat =1,
         dir = new Vetor(0,0,0),
-        arma = new Arma({rounds:220, maxRounds:220}),
+        arma = new Arma({rounds:50, maxRounds:50}),
         dash = new Skill({
             start: function(char, dt){
                 
@@ -20,8 +20,6 @@ function Char(exemplo){
                 else {
                     char.vModifier = 5;
                     char.v.mod = char.vMax*char.vModifier;
-                    console.log("a:")
-                    console.log(char.v.mod)
                 }
             },
             active: function(char, dt){
@@ -50,7 +48,7 @@ function Char(exemplo){
         walkDir = new Vetor(1,0,1),
         recarregar = new Skill({
             start: function(char, dt){
-                if(char.arma.rounds == 220){
+                if(char.arma.rounds == char.arma.maxRounds){
                     this.interrupt(); //força a entrada em cooldown
                 }
                 else{
@@ -101,7 +99,6 @@ function Char(exemplo){
             active: function(char, dt){
                 if(char.vModifier != 0.1){
                     char.estabilizaVmodifier(0.1, dt, 1);
-                    console.log(char.vModifier);
                 }
             },
             end: function(char){
@@ -112,7 +109,7 @@ function Char(exemplo){
                 return;
             },
             duration: 0.02,
-            cooldown: 0.02,
+            cooldown: 0.04 ,
         }),
         andar = new Skill({
             start: function(char, dt){
@@ -125,9 +122,8 @@ function Char(exemplo){
                 // }
                 },
             active: function(char, dt){
-                // console.log(char.vModifier)
                 if(char.vModifier != 1 && char.atirar.onGoing <= 0 && char.recarregar.onGoing <= 0){
-                    console.log("hmmmm")
+                    
                     char.estabilizaVmodifier(1, dt, 10) //vai pra 1, num crescimento de 5 unidades por segundo; Ou seja, em 0.2 segundos vira 1
                 }
                 //char.vModifier = 1;
@@ -168,7 +164,10 @@ function Char(exemplo){
     this.atirar = atirar;
     this.recarregar = recarregar;
     this.andar = andar;
+
+    this.hp  = 3;
 }
+Char.prototype = new Sprite({});
 Char.prototype.controlePorTeclas = function(opcoes, tiros){
     var dirX = 0;
     var dirY = 0;
@@ -191,8 +190,6 @@ Char.prototype.controlePorTeclas = function(opcoes, tiros){
 
     }
     this.walkDir = this.walkDir.vetorUnitario(dirX, dirY);
-    //console.log(this.a);
-    //console.log(dirX + dirY);
     if(dirX == 0 && dirY == 0){
         this.walkDir.mod = 0;
         this.andar.isTryingTo = false;
@@ -358,17 +355,13 @@ Char.prototype.rastro = function(dt, particulas){
 Char.prototype.estabilizaVmodifier = function(goal, dt, rate){
     var crescimento = goal - this.vModifier
     if(this.vModifier == goal){
-        console.log("IGUAAL")
         return;
     }
     
     if(crescimento > 0){
         this.vModifier += rate*dt;
-        //console.log("a2:")
-        //console.log(goal) 
         if(this.vModifier >= goal){
             this.vModifier = goal;
-            console.log("hmmm")
             return;
         }
         
@@ -383,4 +376,16 @@ Char.prototype.estabilizaVmodifier = function(goal, dt, rate){
     }
     
         
+}
+Char.prototype.tomarDano = function(dano){
+    if(this.imune <= 0 && this.dash.onGoing <= 0){
+        this.hp -= dano;
+    }
+    else console.log("MISS")
+}
+Char.prototype.checkVida = function(){
+    if(this.hp <= 0){
+        return false;
+    }
+    return true;
 }

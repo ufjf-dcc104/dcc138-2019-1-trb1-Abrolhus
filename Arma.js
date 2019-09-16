@@ -6,19 +6,19 @@ function Arma(exemplo){
         h = 2,
         dir = new Vetor(1,0,1),
 
-        damage = 10,
-        fireRate = 10,
+        dano = 1,
+        fireRate = 5,
         spread = 0.1,
         reloadTime = 1,
 
-        rounds = 220,
-        maxRounds = 220,
+        rounds = 50,
+        maxRounds = 50,
         bulletsPerRound = 1,
         bulletSpread = 0,
 
         
         bulletSize = 5,
-        bulletSpeed = 500,
+        bulletSpeed = 1000,
         bulletDuration = 1,
         
         bulletColor = "white",
@@ -30,7 +30,7 @@ function Arma(exemplo){
     this.y = y;
     this.w = w;
     this.h = h;
-    this.damage = damage;
+    this.dano = dano;
     this.fireRate = fireRate;
     this.spread = spread;
     this.reloadTime = reloadTime;
@@ -62,7 +62,6 @@ Arma.prototype.desenhar = function(ctx){
     ctx.rotate(Math.atan2( this.dir.y, this.dir.x)); // in the screenshot I used angle = 20
     ctx.fillStyle = this.color;
     ctx.fillRect(0 + this.h/2,0, this.w,this.h);
-    //console.log("aBC")
     ctx.restore();
 
 }
@@ -84,7 +83,6 @@ Arma.prototype.fire = function(tiros){
         duration: this.bulletDuration
     });
     tiros.push(tiro);
-    //this.atirando = this.cooldown;
     tiro = null;
 }
 Arma.prototype.pullTheTrigger = function(tiros){

@@ -177,13 +177,15 @@ Scene.prototype.passo = function(dt, mouse, teclas){
         this.ctx.globalAlpha = 1;
         this.ctx.fillStyle = "Brown"
         this.ctx.font = "100px Georgia Bold"
-        this.ctx.fillText("Morreste", this.w/5, this.h/2 + 20);
+        this.ctx.textAlign = "center";
+        this.ctx.fillText("Morreste", this.w/2, this.h/2);
         return;
     }
     else if(this.inimigos.length == 0){
         this.ctx.fillStyle = "Pink"
+        this.ctx.textAlign = "center";
         this.ctx.font = "100px Comic Sans MS Bold"
-        this.ctx.fillText("¡Ganhaste!", this.w/7, this.h/2 + 20); //comic sans e em espanhol, desculpa.
+        this.ctx.fillText("¡Ganhaste!", this.w/2, this.h/2); //comic sans e em espanhol, desculpa.
         return;
     }
     this.limpar();

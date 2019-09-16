@@ -180,6 +180,12 @@ Scene.prototype.passo = function(dt, mouse, teclas){
         this.ctx.fillText("Morreste", this.w/2 - 200, this.h/2 + 20);
         return;
     }
+    else if(this.inimigos.length == 0){
+        this.ctx.fillStyle = "Pink"
+        this.ctx.font = "100px Comic Sans Bold"
+        this.ctx.fillText("¡Ganhaste!", this.w/2 - 200, this.h/2 + 20); //comic sans e em espanhol, desculpa.
+        return;
+    }
     this.limpar();
     //this.comportar();
     this.mover(dt);

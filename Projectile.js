@@ -9,6 +9,7 @@ function Projectile(exemplo){
         color = "white",
         decayRate = 0,
         opacity = 1,
+        particulasDeRastro = 0,
     } = exemplo;
     this.x = x;
     this.y = y;
@@ -18,6 +19,8 @@ function Projectile(exemplo){
     this.duration = duration;
     this.decayRate = decayRate;
     this.opacity = opacity;
+    this.fullDuration = duration;
+    this.particulasDeRastro = particulasDeRastro;
 
     this.color = color;
 }
@@ -63,10 +66,18 @@ Projectile.prototype.perseguir = function(opcoes){
     this.vy = 20*Math.sign(+ opcoes.alvo.y-this.y );
 }
 Projectile.prototype.decay = function(dt){
-    console.log(this.opacity)
     this.opacity -= this.decayRate*dt; //meio meh pq ele pode ficar transparente antes da duração acabar, entao sei la, podia ter uma aceleracao no decaimento da opcacidade...
     if(this.opacity < 0){
         this.opacity = 0;
     }
+}
+Projectile.prototype.rastro = function(times){
+    if(times == 0){
+        return;
+    }
+        var rastro = new Projectile({w: this.w, h: this.h, x: this.x, y: this.y, color: "rgb(0,0, 255, " + times*0.01 + ")", decayRate: 5});
+        particulas.push(rastro);
+        rastro = null;
+        times--;
 }
 

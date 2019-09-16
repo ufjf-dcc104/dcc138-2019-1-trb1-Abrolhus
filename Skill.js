@@ -50,7 +50,7 @@ Skill.prototype.update = function(char, dt){
         this.recovery(char, dt);
     }
     else if(this.onGoing <= 0 && this.onCooldown > 0 && this.isTryingTo == true){
-        console.log("Tá no Cooldown");
+        ;
     }
     else{
         ; 

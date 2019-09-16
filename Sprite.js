@@ -25,9 +25,7 @@ Sprite.prototype.desenhar = function(ctx){
     ctx.strokeStyle="black";
     ctx.fillRect(this.x, this.y, this.w, this.h);
 }
-Sprite.prototype.mover = function(dt, mouse){
-    this.atrito.x = this.v.x;
-    this.atrito.y = this.v.y;
+Sprite.prototype.mover = function(dt){
     this.x += this.v.x*this.v.mod*dt;
     this.y += this.v.y*this.v.mod*dt;
 }
@@ -42,6 +40,7 @@ Sprite.prototype.colidiuCom = function(alvo){
         return false;
     return true;
 }
+
 
 
 

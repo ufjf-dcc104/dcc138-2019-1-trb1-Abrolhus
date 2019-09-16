@@ -183,7 +183,7 @@ Scene.prototype.passo = function(dt, mouse, teclas){
     else if(this.inimigos.length == 0){
         this.ctx.fillStyle = "Pink"
         this.ctx.font = "100px Comic Sans MS Bold"
-        this.ctx.fillText("¡Ganhaste!", this.w/5, this.h/2 + 20); //comic sans e em espanhol, desculpa.
+        this.ctx.fillText("¡Ganhaste!", this.w/7, this.h/2 + 20); //comic sans e em espanhol, desculpa.
         return;
     }
     this.limpar();

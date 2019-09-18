@@ -11,8 +11,12 @@ function Scene(params) {
         h: 300,
         mouse: {x:0,y:0},
         teclas: {},
+        fases: [],
+        eventos: [],
+        faseAtual: 0,
     }
     Object.assign(this, exemplo, params);
+    this.tempoDeFase = 0;
 }
 
 Scene.prototype = new Scene();
@@ -46,9 +50,13 @@ Scene.prototype.addTiro = function(coisa){
 
 
 Scene.prototype.desenhar = function(){
+    
     ctx.fillStyle= "tan";
     ctx.strokeStyle="black";
     ctx.fillRect(0, 0, this.w, this.h);
+    ctx.fillStyle = "white";
+    ctx.font = "20px Georgia"
+    ctx.fillText(this.tempoDeFase.toFixed(2), 10, 10)
 
     this.coisas = [];
     // this.coisas.concat(this.inimigos, this.tiros, this.tirosInimigos, this.particulas, this.char);
@@ -165,29 +173,35 @@ Scene.prototype.removeSprites = function () {
 };
 
 Scene.prototype.passo = function(dt, mouse, teclas){
+    
+
+    this.tempoDeFase += dt;
+    this.controleDeFases();
+    this.eventHandler();
+
     this.mouse.x = mouse.x;
     this.mouse.y = mouse.y;
     Object.assign(this.teclas, teclas);
     
     
-    if(this.char[0].hp <= 0){
-        this.ctx.fillStyle = "grey";
-        this.ctx.globalAlpha = 0.01;
-        ctx.fillRect(0,0,this.w,this.h);
-        this.ctx.globalAlpha = 1;
-        this.ctx.fillStyle = "Brown"
-        this.ctx.font = "100px Georgia Bold"
-        this.ctx.textAlign = "center";
-        this.ctx.fillText("Morreste", this.w/2, this.h/2);
-        return;
-    }
-    else if(this.inimigos.length == 0){
-        this.ctx.fillStyle = "Pink"
-        this.ctx.textAlign = "center";
-        this.ctx.font = "100px Comic Sans MS Bold"
-        this.ctx.fillText("¡Ganhaste!", this.w/2, this.h/2); //comic sans e em espanhol, desculpa.
-        return;
-    }
+    // if(this.char[0].hp <= 0){
+    //     this.ctx.fillStyle = "grey";
+    //     this.ctx.globalAlpha = 0.01;
+    //     ctx.fillRect(0,0,this.w,this.h);
+    //     this.ctx.globalAlpha = 1;
+    //     this.ctx.fillStyle = "Brown"
+    //     this.ctx.font = "100px Georgia Bold"
+    //     this.ctx.textAlign = "center";
+    //     this.ctx.fillText("Morreste", this.w/2, this.h/2);
+    //     return;
+    // }
+    // else if(this.inimigos.length == 0){
+    //     this.ctx.fillStyle = "Pink"
+    //     this.ctx.textAlign = "center";
+    //     this.ctx.font = "100px Comic Sans MS Bold"
+    //     this.ctx.fillText("¡Ganhaste!", this.w/2, this.h/2); //comic sans e em espanhol, desculpa.
+    //     return;
+    // }
     this.limpar();
     //this.comportar();
     this.mover(dt);
@@ -195,3 +209,73 @@ Scene.prototype.passo = function(dt, mouse, teclas){
     this.checaColisao();
     //this.removeSprites();
 }
+Scene.prototype.eventHandler = function(){
+    //aparentemente functional mas só consegue ativar um evento por vez (por frame)
+    for(var i=0;i<this.eventos.length;i++){
+        if(this.eventos[i].t < this.tempoDeFase){
+            this.eventos[i].active(this);
+            this.eventos.splice(i, 1);
+            return;
+        }
+    }
+}
+Scene.prototype.iniciaFase = function(num){ // inicia a fase "num"
+    console.log("uai")
+    this.tempoDeFase = 0;
+    this.eventos = [];
+    for(var i = 0; i < this.fases[num].eventos.length; i++){
+
+        // encampusation. 
+        // Caso contrario, quando o active (função) fosse chamado, 
+        // seria usado um evt.inimigos mais recente 
+        // (sempre o ultimo da lista de eventos da fase)
+        // // Javascript é muito legal, e estranho.
+        (function (cena){
+            var evt = cena.fases[num].eventos[i]
+        console.log("cópia do evento " + i + ": ")
+        console.log(evt)
+        if(evt.tipo == "spawnaInimigos"){
+            console.log("vetor de inimigos do evt (depois do if) " + i)
+            console.log(evt.inimigos);
+            cena.eventos.push({
+                t: evt.t,
+                active: function(cena){
+                    console.log("copia depois da funccao do evt " + i)
+                    console.log(evt)
+                    cena.spawnaInimigos(evt.inimigos);
+                }
+            });
+        }
+    }) (this);
+
+    }
+}
+Scene.prototype.spawnaInimigos = function(enemies){ //recebe um vetor de objetos que definem os inimigos
+    console.log(enemies)
+    for(var i = 0; i < enemies.length; i++){
+        if(enemies[i]){
+            console.log("criando " + i)
+            this.inimigos.push(new Enemy(enemies[i]));
+        }
+    }
+}
+Scene.prototype.controleDeFases = function(){
+    if(this.faseAtual >= this.fases.length){
+        console.log("acabou as fases");
+        return;
+    }
+    else if(this.fases[this.faseAtual].ended){
+        this.faseAtual++; //na real o controle de pra qual fase vai, dado que um dos objetivos foi cumprido tem q ficar na prorpria fase
+    }
+    else if(this.fases[this.faseAtual].objective(this)){
+        this.faseAtual++;
+    }
+    else if(!this.fases[this.faseAtual].started){
+        this.iniciaFase(this.faseAtual);
+        this.fases[this.faseAtual].started = true;
+    }
+    else{
+        console.log("no meio da fase?");
+    }
+}
+

@@ -30,7 +30,7 @@ function Skill(exemplo){
     
 }
 Skill.prototype.update = function(char, dt, particulas, tiros){
-    console.log(particulas);
+    //console.log(particulas);
     if(this.onGoing <= 0 && this.onCooldown <= 0 && this.isTryingTo == true && this.isAbleTo == true){
         //console.log(this)
         this.onGoing = this.duration;

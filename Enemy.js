@@ -16,7 +16,7 @@ function Enemy(exemplo){
     this.hp = 2;
     this.maxHp = this.hp;
     if(this.tipo == "soldado"){
-        this.hp = 4;
+        this.hp = 3;
         this.maxHp = this.hp;
     }
     else if( this.tipo == "Mago"){

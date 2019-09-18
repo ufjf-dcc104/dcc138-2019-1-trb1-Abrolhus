@@ -49,20 +49,135 @@
             shift: 0,
             r: 0,
         }
+        var fase1 = {
+            started : false,
+            ended : false,
+            objective: function(scene){
+                return this.eventos.length == 0 && scene.inimigos.length == 0;
+            },
+            eventos: [
+            {t:0, tipo: "spawnaInimigos", inimigos:[
+                    { //se eu colocar a = { .......} para de dar erro, mas sei la;
+                        x:(1 +0.25*Math.random())*canvas.width,
+                        y:Math.random()*canvas.height,
+                        vMax: (0.9 + 0.5*Math.random())*200,
+                        tipo: "soldado",
+                        color: "red",
+                        w:15,
+                        h:15
+                    },
+                    { 
+                        x:(1 +0.25*Math.random())*canvas.width,
+                        y:Math.random()*canvas.height,
+                        vMax: (0.9 + 0.5*Math.random())*200,
+                        tipo: "soldado",
+                        color: "red",
+                        w:15,
+                        h:15
+                    },
+                    { 
+                        x:(1 +0.25*Math.random())*canvas.width,
+                        y:Math.random()*canvas.height,
+                        vMax: (0.9 + 0.5*Math.random())*200,
+                        tipo: "soldado",
+                        color: "red",
+                        w:15,
+                        h:15
+                    },
+                    { 
+                        x:(1 +0.25*Math.random())*canvas.width,
+                        y:Math.random()*canvas.height,
+                        vMax: (0.9 + 0.5*Math.random())*200,
+                        tipo: "soldado",
+                        color: "red",
+                        w:15,
+                        h:15
+                    },
+                    { 
+                        x:(1 +0.25*Math.random())*canvas.width,
+                        y:Math.random()*canvas.height,
+                        vMax: (0.9 + 0.5*Math.random())*200,
+                        tipo: "soldado",
+                        color: "red",
+                        w:15,
+                        h:15
+                    },
+                    { 
+                        x:(1 +0.25*Math.random())*canvas.width,
+                        y:Math.random()*canvas.height,
+                        vMax: (0.9 + 0.5*Math.random())*200,
+                        tipo: "soldado",
+                        color: "red",
+                        w:15,
+                        h:15
+                    },
 
-        for(i=0; i < NNPC; i++){
-            cena1.addInimigo(new Enemy({x:(1 -0.25*Math.random())*canvas.width, y:Math.random()*canvas.height, vMax: (0.9 + 0.5*Math.random())*200, tipo: "soldado", color: "red", w:15, h:15}));
+                ]},
+                {t:10, tipo: "spawnaInimigos", inimigos:[
+                    {
+                        x: (1 -0.25*Math.random())*canvas.width,
+                        y: (1 + 0.3*Math.random())*canvas.height,
+                        vMax: (1.9 + 0.5*Math.random())*200,
+                        tipo: "soldado",
+                        color: "red",
+                        w:15,
+                        h:15
+                    },
+                    {
+                        x:(1 -0.25*Math.random())*canvas.width,
+                        y:(1+ 0.3*Math.random())*canvas.height,
+                        vMax: (0.5 + 0.5*Math.random())*200,
+                        tipo: "soldado",
+                        color: "red",
+                        w:15,
+                        h:15
+                    },
+                    {
+                    x: (1 -0.25*Math.random())*canvas.width,
+                    y: (1 + 0.3*Math.random())*canvas.height,
+                    vMax: (1.9 + 0.5*Math.random())*200,
+                    tipo: "soldado",
+                    color: "red",
+                    w:15,
+                    h:15
+                },
+                {
+                    x: (1 -0.25*Math.random())*canvas.width,
+                    y: (1 + 0.3*Math.random())*canvas.height,
+                    vMax: (1.9 + 0.5*Math.random())*200,
+                    tipo: "soldado",
+                    color: "red",
+                    w:15,
+                    h:15
+                },
+                {
+                    x: (1 -0.25*Math.random())*canvas.width,
+                    y: (1 + 0.3*Math.random())*canvas.height,
+                    vMax: (1.9 + 0.5*Math.random())*200,
+                    tipo: "soldado",
+                    color: "red",
+                    w:15,
+                    h:15
+                },
+
+                ]},
+            ]
         }
-        for(i=0; i < 5; i++){
-            cena1.addInimigo(new Enemy({x:(1 -0.25*Math.random())*canvas.width, y:(2+ Math.random())*canvas.height, vMax: (0.5 + 0.5*Math.random())*200, tipo: "soldado", color: "red", w:15, h:15}));
-        }
-        for(i=0; i < 3; i++){
-            cena1.addInimigo(new Enemy({x:(1 -0.25*Math.random())*canvas.width, y:(-3+ Math.random())*canvas.height, vMax: (0.5 + 0.5*Math.random())*200, tipo: "soldado", color: "red", w:15, h:15}));
-        }
-        cena1.addInimigo(new Enemy({x:(1 -0.25*Math.random())*canvas.width, y:Math.random()*canvas.height, vMax: (0.9 + 0.2*Math.random())*200, tipo: "mago", color: "brown"}))
-        cena1.addInimigo(new Enemy({x:(1 -0.25*Math.random())*canvas.width, y:Math.random()*canvas.height, vMax: (0.9 + 0.2*Math.random())*200, tipo: "mago", color: "brown"}))
+
+        // for(i=0; i < NNPC; i++){
+        //     cena1.addInimigo(new Enemy({x:(1 -0.25*Math.random())*canvas.width, y:Math.random()*canvas.height, vMax: (0.9 + 0.5*Math.random())*200, tipo: "soldado", color: "red", w:15, h:15}));
+        // }
+        // for(i=0; i < 5; i++){
+        //     cena1.addInimigo(new Enemy({x:(1 -0.25*Math.random())*canvas.width, y:(2+ Math.random())*canvas.height, vMax: (0.5 + 0.5*Math.random())*200, tipo: "soldado", color: "red", w:15, h:15}));
+        // }
+        // for(i=0; i < 3; i++){
+        //     cena1.addInimigo(new Enemy({x:(1 -0.25*Math.random())*canvas.width, y:(-3+ Math.random())*canvas.height, vMax: (0.5 + 0.5*Math.random())*200, tipo: "soldado", color: "red", w:15, h:15}));
+        // }
+        // cena1.addInimigo(new Enemy({x:(1 -0.25*Math.random())*canvas.width, y:Math.random()*canvas.height, vMax: (0.9 + 0.2*Math.random())*200, tipo: "mago", color: "brown"}))
+        // cena1.addInimigo(new Enemy({x:(1 -0.25*Math.random())*canvas.width, y:Math.random()*canvas.height, vMax: (0.9 + 0.2*Math.random())*200, tipo: "mago", color: "brown"}))
         cena1.addChar(pc);
-
+        cena1.fases.push(fase1);
+        
         //Passo de Animação
         function passo (t){
             dt = (t-anterior)/1000;

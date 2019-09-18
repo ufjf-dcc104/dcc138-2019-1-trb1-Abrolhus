@@ -339,7 +339,6 @@ Char.prototype.desenhar = function(ctx){
         ctx.fillStyle= this.color;
     }
     
-    i
     ctx.strokeStyle="black";
     ctx.fillRect(this.x, this.y, this.w, this.h);
     this.arma.desenhar(ctx);

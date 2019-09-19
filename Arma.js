@@ -80,7 +80,8 @@ Arma.prototype.fire = function(tiros){
         h: 4,
         v: v,
         color: "white",
-        duration: this.bulletDuration
+        duration: this.bulletDuration,
+        particulasDeRastro: 9,
     });
     tiros.push(tiro);
     tiro = null;

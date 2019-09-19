@@ -347,7 +347,8 @@ Char.prototype.desenhar = function(ctx){
     ctx.fillText(this.arma.rounds, canvas.width - 40, canvas.height - 30, 35);
 }
 Char.prototype.rastro = function(dt, particulas){
-    var rastro = new Projectile({w: this.w, h: this.h, x: this.x, y: this.y, color: "rgb(0,0, 255, 0.3", decayRate: 5});
+    console.log(particulas);
+    var rastro = new Projectile({w: this.w, h: this.h, x: this.x, y: this.y, color: "rgb(0,0, 255, 0.3", decayRate: 5, particulasDeRastro: 9});
     particulas.push(rastro);
     rastro = null;
 }

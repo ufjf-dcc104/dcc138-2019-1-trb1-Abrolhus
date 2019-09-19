@@ -14,6 +14,9 @@ function Scene(params) {
         fases: [],
         eventos: [],
         faseAtual: 0,
+        x: 0,
+        y: 0,
+        telaPersonalizada: undefined,
     }
     Object.assign(this, exemplo, params);
     this.tempoDeFase = 0;
@@ -51,12 +54,26 @@ Scene.prototype.addTiro = function(coisa){
 
 Scene.prototype.desenhar = function(){
     
+    
+    
+    if(this.telaPersonalizada){
+        this.telaPersonalizada(this);
+
+        // (function(cena){
+        //     cena.ctx.font = "50px Comic Sans MS"
+        //     cena.ctx.textAlign = "center"
+        //     cena.ctx.fillStyle = "orange"
+        //     cena.ctx.fillText("Acabou-se", cena.x + cena.w/2, cena.y + cena.h/2)
+        //     }) (this);
+        return;
+    }
     ctx.fillStyle= "tan";
     ctx.strokeStyle="black";
     ctx.fillRect(0, 0, this.w, this.h);
-    ctx.fillStyle = "white";
-    ctx.font = "20px Georgia"
-    ctx.fillText(this.tempoDeFase.toFixed(2), 10, 10)
+
+    ctx.fillStyle = "blue";
+    ctx.font = "20px Georgia";
+    ctx.fillText(this.tempoDeFase.toFixed(2), 10, 10);
 
     this.coisas = [];
     // this.coisas.concat(this.inimigos, this.tiros, this.tirosInimigos, this.particulas, this.char);
@@ -90,24 +107,25 @@ Scene.prototype.mover = function(dt){
         this.char[i].mover(dt, this.mouse, this.particulas, this.tiros);
     }
     for(var i = 0; i<this.inimigos.length; i++){
-        this.inimigos[i].comportar(dt, pc, this.tirosInimigos);
+        this.inimigos[i].comportar(dt, pc, this.tirosInimigos, this);
         this.inimigos[i].mover(dt);
     }  
     for(var i = 0; i<this.particulas.length; i++){
-        this.particulas[i].mover(dt);
+        this.particulas[i].mover(dt, this.particulas);
         if(this.particulas[i].duration <= 0){
             this.particulas.splice(i, 1);
         }
     }  
     for(var i = 0; i<this.tiros.length; i++){
-        this.tiros[i].mover(dt);
+        this.tiros[i].mover(dt, this.particulas);
+        //this.tiros[i].rastro(this.particulas);
         if(this.tiros[i].duration <= 0){
             this.tiros.splice(i, 1);
         }
     }  
     for(var i = 0; i<this.tirosInimigos.length; i++){
-        this.tirosInimigos[i].mover(dt);
-        this.tirosInimigos[i].rastro(this.tirosInimigos[i].particulasDeRastro, this.particulas);
+        this.tirosInimigos[i].mover(dt, this.particulas);
+        //this.tirosInimigos[i].rastro(this.particulas);
         if(this.tirosInimigos[i].duration <= 0){
             this.tirosInimigos.splice(i, 1);
         }
@@ -232,29 +250,25 @@ Scene.prototype.iniciaFase = function(num){ // inicia a fase "num"
         // // Javascript é muito legal, e estranho.
         (function (cena){
             var evt = cena.fases[num].eventos[i]
-        console.log("cópia do evento " + i + ": ")
-        console.log(evt)
         if(evt.tipo == "spawnaInimigos"){
-            console.log("vetor de inimigos do evt (depois do if) " + i)
-            console.log(evt.inimigos);
             cena.eventos.push({
                 t: evt.t,
                 active: function(cena){
-                    console.log("copia depois da funccao do evt " + i)
-                    console.log(evt)
                     cena.spawnaInimigos(evt.inimigos);
                 }
             });
+        }
+        else if(evt.tipo == "tela"){
+            console.log(evt.conteudo);
+            cena.telaPersonalizada = evt.conteudo;
         }
     }) (this);
 
     }
 }
 Scene.prototype.spawnaInimigos = function(enemies){ //recebe um vetor de objetos que definem os inimigos
-    console.log(enemies)
     for(var i = 0; i < enemies.length; i++){
         if(enemies[i]){
-            console.log("criando " + i)
             this.inimigos.push(new Enemy(enemies[i]));
         }
     }
@@ -264,18 +278,20 @@ Scene.prototype.controleDeFases = function(){
         console.log("acabou as fases");
         return;
     }
+    else if(!this.fases[this.faseAtual].started){
+        this.iniciaFase(this.faseAtual);
+        this.fases[this.faseAtual].started = true;
+    }
+    
     else if(this.fases[this.faseAtual].ended){
         this.faseAtual++; //na real o controle de pra qual fase vai, dado que um dos objetivos foi cumprido tem q ficar na prorpria fase
     }
     else if(this.fases[this.faseAtual].objective(this)){
         this.faseAtual++;
     }
-    else if(!this.fases[this.faseAtual].started){
-        this.iniciaFase(this.faseAtual);
-        this.fases[this.faseAtual].started = true;
-    }
+    
     else{
-        console.log("no meio da fase?");
+
     }
 }
 

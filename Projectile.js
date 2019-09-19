@@ -42,8 +42,9 @@ Projectile.prototype.desenhar = function(ctx){
     //console.log("aBC")
     ctx.restore();
 }
-Projectile.prototype.mover = function(dt){
+Projectile.prototype.mover = function(dt, particulas){
     this.decay(dt);
+    this.rastro(particulas)
     this.duration -= dt;
 
     this.x += this.v.x*this.v.mod*dt;
@@ -71,13 +72,15 @@ Projectile.prototype.decay = function(dt){
         this.opacity = 0;
     }
 }
-Projectile.prototype.rastro = function(times, particulas){
+Projectile.prototype.rastro = function(particulas){
+    var times = this.particulasDeRastro;
     if(times == 0){
         return;
     }
-        var rastro = new Projectile({w: this.w, h: this.h, x: this.x, y: this.y, color: "rgb(0,0, 255, " + times*0.01 + ")", decayRate: 5});
-        particulas.push(rastro);
-        rastro = null;
-        times--;
+    var rastro = new Projectile({w: this.w, h: this.h, x: this.x, y: this.y, color: "rgb(0,0, 255, " + times*0.01 + ")", decayRate: 5});
+
+    particulas.push(rastro);
+    rastro = null;
+    times--;
 }
 

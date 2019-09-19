@@ -6,6 +6,7 @@ function Sprite(exemplo){
         h = 10,
         v = new Vetor(0,0, 0),
         color = "blue",
+        tipo = undefined,
     } = exemplo;
     this.x = x;
     this.y = y;
@@ -13,7 +14,7 @@ function Sprite(exemplo){
     this.h = h;
     this.v = v;
     this.vMax = 300;
-
+    this.tipo = tipo;
     this.color = color;
     this.dir = new Vetor(1,0,1);
 }
@@ -39,6 +40,10 @@ Sprite.prototype.colidiuCom = function(alvo){
     if(alvo.y > this.y + this.h)
         return false;
     return true;
+}
+Sprite.prototype.distanciaDoCentroDe = function(alvo){
+    ///retorna distancia entre o centro disso e do alvo 
+    return Math.hypot((alvo.x + alvo.w/2) - (this.x +this.w/2), (alvo.y + alvo.h/2) - (this.y + this.h/2))
 }
 
 

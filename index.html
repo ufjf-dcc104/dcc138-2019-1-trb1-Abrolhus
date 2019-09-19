@@ -52,8 +52,9 @@
         var fase1 = {
             started : false,
             ended : false,
-            objective: function(scene){
-                return this.eventos.length == 0 && scene.inimigos.length == 0;
+            tipo: "jogavel",
+            objective: function(cena){
+                return cena.eventos.length == 0 && cena.inimigos.length == 0;
             },
             eventos: [
             {t:0, tipo: "spawnaInimigos", inimigos:[
@@ -97,8 +98,8 @@
                         x:(1 +0.25*Math.random())*canvas.width,
                         y:Math.random()*canvas.height,
                         vMax: (0.9 + 0.5*Math.random())*200,
-                        tipo: "soldado",
-                        color: "red",
+                        tipo: "mago",
+                        color: "purple",
                         w:15,
                         h:15
                     },
@@ -163,6 +164,240 @@
                 ]},
             ]
         }
+        //fase 2
+        var fase2 = {
+            started : false,
+            ended : false,
+            tipo: "jogavel",
+            objective: function(cena){
+                return cena.eventos.length == 0 && cena.inimigos.length == 0;
+            },
+            eventos: [
+                {t:0, tipo: "spawnaInimigos", inimigos:[
+                        { //se eu colocar a = { .......} para de dar erro, mas sei la;
+                            x:(1 +0.25*Math.random())*canvas.width,
+                            y:Math.random()*canvas.height,
+                            vMax: (0.9 + 0.5*Math.random())*200,
+                            tipo: "soldado",
+                            color: "red",
+                            w:15,
+                            h:15
+                        },
+                        { 
+                            x:(1 +0.25*Math.random())*canvas.width,
+                            y:Math.random()*canvas.height,
+                            vMax: (0.9 + 0.5*Math.random())*200,
+                            tipo: "soldado",
+                            color: "red",
+                            w:15,
+                            h:15
+                        },
+                        { 
+                            x:(1 +0.25*Math.random())*canvas.width,
+                            y:Math.random()*canvas.height,
+                            vMax: (0.9 + 0.5*Math.random())*200,
+                            tipo: "soldado",
+                            color: "red",
+                            w:15,
+                            h:15
+                        },
+                        { 
+                            x:(1 +0.25*Math.random())*canvas.width,
+                            y:Math.random()*canvas.height,
+                            vMax: (0.9 + 0.5*Math.random())*200,
+                            tipo: "soldado",
+                            color: "red",
+                            w:15,
+                            h:15
+                        },
+                        { 
+                            x:(1 +0.25*Math.random())*canvas.width,
+                            y:Math.random()*canvas.height,
+                            vMax: (0.9 + 0.5*Math.random())*200,
+                            tipo: "soldado",
+                            color: "red",
+                            w:15,
+                            h:15
+                        },
+                        { 
+                            x:(1 +0.25*Math.random())*canvas.width,
+                            y:Math.random()*canvas.height,
+                            vMax: (0.9 + 0.5*Math.random())*200,
+                            tipo: "soldado",
+                            color: "red",
+                            w:15,
+                            h:15
+                        },
+                        { 
+                            x:(1 +0.25*Math.random())*canvas.width,
+                            y:Math.random()*canvas.height,
+                            vMax: (0.9 + 0.5*Math.random())*200,
+                            tipo: "mago",
+                            color: "purple",
+                            w:15,
+                            h:15
+                        },
+                        { 
+                            x:(1 +0.25*Math.random())*canvas.width,
+                            y:Math.random()*canvas.height,
+                            vMax: (0.9 + 0.5*Math.random())*200,
+                            tipo: "mago",
+                            color: "purple",
+                            w:15,
+                            h:15
+                        },
+                        { 
+                            x:(1 +0.25*Math.random())*canvas.width,
+                            y:Math.random()*canvas.height,
+                            vMax: (0.9 + 0.5*Math.random())*200,
+                            tipo: "mago",
+                            color: "purple",
+                            w:15,
+                            h:15
+                        },
+
+
+                    ]
+                },
+                {t:10, tipo: "spawnaInimigos", inimigos:[
+                    {
+                        x: (-0.25*Math.random())*canvas.width,
+                        y: (1 + 0.3*Math.random())*canvas.height,
+                        vMax: (1.9 + 0.5*Math.random())*200,
+                        tipo: "soldado",
+                        color: "red",
+                        w:15,
+                        h:15
+                    },
+                    {
+                        x:(-0.25*Math.random())*canvas.width,
+                        y:(1+ 0.3*Math.random())*canvas.height,
+                        vMax: (0.5 + 0.5*Math.random())*200,
+                        tipo: "soldado",
+                        color: "red",
+                        w:15,
+                        h:15
+                    },
+                    {
+                        x: (-0.25*Math.random())*canvas.width,
+                        y: (1 + 0.3*Math.random())*canvas.height,
+                        vMax: (1.9 + 0.5*Math.random())*200,
+                        tipo: "soldado",
+                        color: "red",
+                        w:15,
+                        h:15
+                    },
+                    {
+                        x: (-0.25*Math.random())*canvas.width,
+                        y: (1 + 0.3*Math.random())*canvas.height,
+                        vMax: (1.9 + 0.5*Math.random())*200,
+                        tipo: "soldado",
+                        color: "red",
+                        w:15,
+                        h:15
+                    },
+                    {
+                        x: (-0.25*Math.random())*canvas.width,
+                        y: (1 + 0.3*Math.random())*canvas.height,
+                        vMax: (1.9 + 0.5*Math.random())*200,
+                        tipo: "soldado",
+                        color: "red",
+                        w:15,
+                        h:15
+                    },
+                    {
+                        x: (-0.35*Math.random())*canvas.width,
+                        y: (1 + 0.3*Math.random())*canvas.height,
+                        vMax: (1.9 + 0.5*Math.random())*200,
+                        tipo: "soldado",
+                        color: "red",
+                        w:15,
+                        h:15
+                    },
+                    {
+                        x: (-0.25*Math.random())*canvas.width,
+                        y: (1 + 0.3*Math.random())*canvas.height,
+                        vMax: (1.9 + 0.5*Math.random())*200,
+                        tipo: "soldado",
+                        color: "red",
+                        w:15,
+                        h:15
+                    },
+                    {
+                    x: (-0.25*Math.random())*canvas.width,
+                    y: (-0.3*Math.random())*canvas.height,
+                    vMax: (1.9 + 0.5*Math.random())*200,
+                    tipo: "soldado",
+                    color: "red",
+                    w:15,
+                    h:15
+                },
+                {
+                    x: (-0.35*Math.random())*canvas.width,
+                    y: (-0.3*Math.random())*canvas.height,
+                    vMax: (1.9 + 0.5*Math.random())*200,
+                    tipo: "soldado",
+                    color: "red",
+                    w:15,
+                    h:15
+                },
+                {
+                    x: (-0.35*Math.random())*canvas.width,
+                    y: (-0.3*Math.random())*canvas.height,
+                    vMax: (1.9 + 0.5*Math.random())*200,
+                    tipo: "soldado",
+                    color: "red",
+                    w:15,
+                    h:15
+                },
+                {
+                    x: (-0.55*Math.random())*canvas.width,
+                    y: (-0.3*Math.random())*canvas.height,
+                    vMax: (1.9 + 0.5*Math.random())*200,
+                    tipo: "soldado",
+                    color: "red",
+                    w:15,
+                    h:15
+                },
+                {
+                    x: (-0.45*Math.random())*canvas.width,
+                    y: (-0.3*Math.random())*canvas.height,
+                    vMax: (1.9 + 0.5*Math.random())*200,
+                    tipo: "soldado",
+                    color: "red",
+                    w:15,
+                    h:15
+                },
+                {
+                    x: (-0.35*Math.random())*canvas.width,
+                    y: (-0.3*Math.random())*canvas.height,
+                    vMax: (1.9 + 0.5*Math.random())*200,
+                    tipo: "soldado",
+                    color: "red",
+                    w:15,
+                    h:15
+                },
+
+                ]},
+            ]
+        }
+        var end = {
+            started : false,
+            ended : false,
+            tipo: "estatico",
+            objective: function(cena){
+                return false;
+            },
+            eventos: [
+                {t:0, tipo: "tela", conteudo: function(cena){
+                    cena.ctx.font = "50px Comic Sans MS"
+                    cena.textAlign = "center"
+                    cena.fillStyle = "orange"
+                    cena.ctx.fillText("Acabou-se", cena.x + cena.w/2, cena.y + cena.h/2)
+                    }
+                }
+            ]
+        }
 
         // for(i=0; i < NNPC; i++){
         //     cena1.addInimigo(new Enemy({x:(1 -0.25*Math.random())*canvas.width, y:Math.random()*canvas.height, vMax: (0.9 + 0.5*Math.random())*200, tipo: "soldado", color: "red", w:15, h:15}));
@@ -177,6 +412,8 @@
         // cena1.addInimigo(new Enemy({x:(1 -0.25*Math.random())*canvas.width, y:Math.random()*canvas.height, vMax: (0.9 + 0.2*Math.random())*200, tipo: "mago", color: "brown"}))
         cena1.addChar(pc);
         cena1.fases.push(fase1);
+        cena1.fases.push(fase2);
+        cena1.fases.push(end);
         
         //Passo de Animação
         function passo (t){

@@ -20,6 +20,7 @@ function Enemy(exemplo){
         this.maxHp = this.hp;
     }
     else if( this.tipo == "Mago"){
+        this.color = "purple";
         this.hp = 2;
         this.maxHp = this.hp;
     }
@@ -83,26 +84,30 @@ Enemy.prototype.atirar = function(alvo, tirosInimigos){
     tirosInimigos.push(tiro);
     tiro = null;
 }
-Enemy.prototype.comportar = function(dt, alvo, tirosInimigos){
+Enemy.prototype.comportar = function(dt, alvo, tirosInimigos, cena){
     this.onCooldown -= dt;
     if(this.tipo == "soldado"){
         this.perseguir(alvo)
     }
     else if(this.tipo == "mago"){
-        if(this.onCooldown < 0){
+        if(this.onCooldown < 0 && this.estaDentroDe(cena, this.w)){
+            this.v.mod = 0;
             this.atirar(alvo, tirosInimigos)
             this.onCooldown = this.cooldown;
         }
+        else if(this.estaDentroDe(cena, this.w)){ //se tirar esse alse ele fica andando de um lado pro outro
+            this.v.mod = 0;
+        }
         else{
-            //this.manterDistancia(alvo);
-            this.v.mod = 0
+            this.entrarNaAreaVisivel(cena);
+            //this.v.mod = this.vMax;
         }
     }
     
 }
 Enemy.prototype.desenhar = function(ctx){
     ctx.strokeStyle="black";
-    ctx.fillStyle= "grey";
+    ctx.fillStyle= "darkred";
     ctx.fillRect(this.x, this.y, this.w, this.h);
 
     ctx.fillStyle= this.color;
@@ -111,6 +116,18 @@ Enemy.prototype.desenhar = function(ctx){
     ctx.strokeStyle="black";
     ctx.fillRect(this.x, this.y, this.w, this.h);
     ctx.globalAlpha = 1;
+}
+Enemy.prototype.entrarNaAreaVisivel = function(cena){
+    if(!this.estaDentroDe(cena, this.w)){
+        this.v.x = ((cena.x + cena.w/2) - (this.x + this.w/2))/this.distanciaDoCentroDe(cena);
+        this.v.y = ((cena.y + cena.h/2) - (this.y + this.h/2))/this.distanciaDoCentroDe(cena);
+    }
+}
+Enemy.prototype.estaDentroDe = function(alvo, margem){
+    return (this.x + this.w < alvo.x + alvo.w - margem &&
+    this.x > alvo.x + margem &&
+    this.y > alvo.y + margem &&
+    this.y + this.h < alvo.y + alvo.h - margem)
 }
 
 

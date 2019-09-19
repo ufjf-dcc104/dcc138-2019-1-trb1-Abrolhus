@@ -220,7 +220,7 @@ Scene.prototype.passo = function(dt, mouse, teclas){
     //     this.ctx.fillText("¡Ganhaste!", this.w/2, this.h/2); //comic sans e em espanhol, desculpa.
     //     return;
     // }
-    this.limpar();
+    //this.limpar();
     //this.comportar();
     this.mover(dt);
     this.desenhar();

@@ -45,6 +45,18 @@ Sprite.prototype.distanciaDoCentroDe = function(alvo){
     ///retorna distancia entre o centro disso e do alvo 
     return Math.hypot((alvo.x + alvo.w/2) - (this.x +this.w/2), (alvo.y + alvo.h/2) - (this.y + this.h/2))
 }
+Sprite.prototype.desenhaBarraDeVida = function(ctx, x,y,w,h){
+    ctx.save()
+    if(this.hp && this.maxHp){
+        ctx.strokeStyle = "3px black"
+        ctx.fillStyle = "red"
+        //ctx.fillStroke(x,y,w,h);
+        ctx.fillRect(x,y,w,h);
+        ctx.fillStyle = "green";
+        ctx.fillRect(x,y,w*(this.hp/this.maxHp),h);
+    }
+    ctx.restore();
+}
 
 
 

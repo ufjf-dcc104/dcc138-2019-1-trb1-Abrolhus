@@ -391,14 +391,30 @@
             eventos: [
                 {t:0, tipo: "tela", conteudo: function(cena){
                     cena.ctx.font = "50px Comic Sans MS"
-                    cena.textAlign = "center"
-                    cena.fillStyle = "orange"
+                    cena.ctx.textAlign = "center"
+                    cena.ctx.fillStyle = "darkgreen"
                     cena.ctx.fillText("Acabou-se", cena.x + cena.w/2, cena.y + cena.h/2)
                     }
                 }
             ]
         }
-
+        var telaMorreu = {
+            started : false,
+            ended : false,
+            tipo: "estatico",
+            objective: function(cena){
+                return false;
+            },
+            eventos: [
+                {t:0, tipo: "tela", conteudo: function(cena){
+                    cena.ctx.font = "50px Comic Sans MS"
+                    cena.ctx.textAlign = "center"
+                    cena.ctx.fillStyle = "darkred"
+                    cena.ctx.fillText("Morreste", cena.x + cena.w/2, cena.y + cena.h/2)
+                    }
+                }
+            ]
+        }
         // for(i=0; i < NNPC; i++){
         //     cena1.addInimigo(new Enemy({x:(1 -0.25*Math.random())*canvas.width, y:Math.random()*canvas.height, vMax: (0.9 + 0.5*Math.random())*200, tipo: "soldado", color: "red", w:15, h:15}));
         // }
@@ -414,6 +430,7 @@
         cena1.fases.push(fase1);
         cena1.fases.push(fase2);
         cena1.fases.push(end);
+        cena1.fases.push(telaMorreu);
         
         //Passo de Animação
         function passo (t){

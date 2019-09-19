@@ -8,6 +8,9 @@ function Char(exemplo){
         cat =1,
         dir = new Vetor(0,0,0),
         arma = new Arma({rounds:50, maxRounds:50}),
+
+
+        //Skills
         dash = new Skill({
             start: function(char, dt, particulas, tiros){
                 
@@ -140,6 +143,28 @@ function Char(exemplo){
             duration: 0.04, //AQUI QUE TÀ O PROBLEMA, ANDAR N TEM DURAÇÂO TLG? OU TEM? SEI La
             cooldown: 0, // OUTRO PROBLEMA: QUANDO O CHAR PARA DE "ANDAR" TEM QUE TER O ATRITO TLG?, tem q ter a deslizada
         }),
+        imunizar = new Skill({
+            start: function(char, dt, particulas, tiros){
+                return;
+
+            },
+            active: function(char, dt, particulas, tiros){
+                return;
+            
+            },
+            end: function(char, dt, particulas, tiros){
+                char.opacidade = 1;
+                return;
+            },
+            recovery: function(char, dt, particulas, tiros){
+                return;
+            },
+            desenhaActive: function(ctx, char){
+                char.opacidade = 5*Math.cos(3*Math.PI*2*this.onGoing/this.duration*Math.PI*2)
+            },
+            duration: 1, 
+            cooldown: 2, 
+        }),
 
     } = exemplo;
     Sprite.call(this, exemplo);
@@ -154,7 +179,6 @@ function Char(exemplo){
     this.dir = dir; //direcao que o mouse aponta basicamente;
     
     this.defautColor = this.color;
-    this.imune = 0;
     this.walkDir = walkDir; //direção q o char tá caminhando para, basicamente a direção da aceleraçõa
 
     //Equipamento
@@ -164,8 +188,11 @@ function Char(exemplo){
     this.atirar = atirar;
     this.recarregar = recarregar;
     this.andar = andar;
+    this.imunizar = imunizar
 
     this.hp  = 3;
+    this.maxHp = 3;
+    this.opacidade = 1;
 }
 Char.prototype = new Sprite({});
 Char.prototype.controlePorTeclas = function(opcoes){
@@ -274,8 +301,17 @@ Char.prototype.checkPrecedenciaSkills = function(){
         this.dash.interrupt();
     }
     else{
-        this.dash.isAbleTo = true
+        this.dash.isAbleTo = true;
     }
+    //imunizar 
+    if(false){
+        this.dash.isAbleTo = false;
+        this.dash.interrupt();
+    }
+    else{
+        this.dash.isAbleTo = true;
+    }
+
 }
 Char.prototype.updateSkills = function(dt, particulas, tiros){
     
@@ -284,6 +320,7 @@ Char.prototype.updateSkills = function(dt, particulas, tiros){
     //console.log(this.andar.onGoing);
     this.andar.update(this, dt, particulas, tiros);
     this.recarregar.update(this, dt, particulas, tiros);
+    this.imunizar.update(this, dt, particulas, tiros);
 
 }
 
@@ -323,6 +360,8 @@ Char.prototype.atualizaAtrito = function(){
     this.atrito.y = this.v.y;
 }
 Char.prototype.desenhar = function(ctx){  
+    ctx.save();
+    ctx.globalAlpha = this.opacidade;
     //console.log("aaaA") 
     if(this.recarregar.onGoing > 0){
         //ctx.fillStyle = "orange";
@@ -335,16 +374,25 @@ Char.prototype.desenhar = function(ctx){
     else if(this.dash.onCooldown > 0){
         ctx.fillStyle= "purple";    
     }
+    if(this.imunizar.onGoing > 0){
+        ctx.strokeStyle = "white";
+        ctx.fillStyle= this.color;
+        this.imunizar.desenhaActive(ctx, this);
+    }
     else{
         ctx.fillStyle= this.color;
+        ctx.strokeStyle="black";
     }
     
-    ctx.strokeStyle="black";
+    
+    
     ctx.fillRect(this.x, this.y, this.w, this.h);
     this.arma.desenhar(ctx);
     
     ctx.fillStyle = "red";
     ctx.fillText(this.arma.rounds, canvas.width - 40, canvas.height - 30, 35);
+
+    ctx.restore();
 }
 Char.prototype.rastro = function(dt, particulas){
     console.log(particulas);
@@ -378,8 +426,9 @@ Char.prototype.estabilizaVmodifier = function(goal, dt, rate){
         
 }
 Char.prototype.tomarDano = function(dano){
-    if(this.imune <= 0 && this.dash.onGoing <= 0){
+    if(this.imunizar.onGoing <= 0 && this.dash.onGoing <= 0){
         this.hp -= dano;
+        this.imunizar.onGoing = this.imunizar.duration;
     }
     else console.log("MISS")
 }
@@ -388,4 +437,7 @@ Char.prototype.checkVida = function(){
         return false;
     }
     return true;
+}
+Char.prototype.desenhaBarraDeStamina = function(){
+    ;
 }

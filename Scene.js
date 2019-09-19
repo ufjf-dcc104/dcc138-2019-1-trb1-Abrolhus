@@ -72,8 +72,10 @@ Scene.prototype.desenhar = function(){
     ctx.fillRect(0, 0, this.w, this.h);
 
     ctx.fillStyle = "blue";
-    ctx.font = "20px Georgia";
-    ctx.fillText(this.tempoDeFase.toFixed(2), 10, 10);
+    ctx.font = "15px Georgia";
+    ctx.fillText(this.tempoDeFase.toFixed(2), 10, 20);
+    ctx.font = "16px arial black";
+    ctx.fillText("Fase " + this.faseAtual + 1, 10, 40);
 
     this.coisas = [];
     // this.coisas.concat(this.inimigos, this.tiros, this.tirosInimigos, this.particulas, this.char);
@@ -97,11 +99,21 @@ Scene.prototype.desenhar = function(){
     for(var i = 0; i<this.tirosInimigos.length; i++){
         this.tirosInimigos[i].desenhar(this.ctx);
     }    
+    this.char[0].desenhaBarraDeVida(this.ctx, this.x + 0.05*this.w, this.y + 0.9*this.h, 0.1*this.w, 0.008*this.h)
+    //this.char[0].desenhaBarraDeVida(this.ctx, 0 , 0, 50, 15)
+
     ctx.fillStyle = "red";
     ctx.fillRect(mouse.x, mouse.y, 5,5);
 };
 
 Scene.prototype.mover = function(dt){
+    if(!this.checkCharVivo()){
+        this.faseAtual = this.fases.length - 1; 
+        // A ultima fase é sempre a Tela de Morte, 
+        // A penultima a tela de Vitória;
+    }
+
+
     for(var i = 0; i<this.char.length; i++){
         this.char[i].controlePorTeclas({teclas:this.teclas})
         this.char[i].mover(dt, this.mouse, this.particulas, this.tiros);
@@ -293,5 +305,8 @@ Scene.prototype.controleDeFases = function(){
     else{
 
     }
+}
+Scene.prototype.checkCharVivo = function(){
+    return this.char[0].hp > 0;
 }
 

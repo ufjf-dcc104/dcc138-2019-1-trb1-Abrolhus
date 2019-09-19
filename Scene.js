@@ -75,7 +75,7 @@ Scene.prototype.desenhar = function(){
     ctx.font = "15px Georgia";
     ctx.fillText(this.tempoDeFase.toFixed(2), 10, 20);
     ctx.font = "16px arial black";
-    ctx.fillText("Fase " + this.faseAtual + 1, 10, 40);
+    ctx.fillText("Fase " + (this.faseAtual + 1), 10, 40);
 
     this.coisas = [];
     // this.coisas.concat(this.inimigos, this.tiros, this.tirosInimigos, this.particulas, this.char);

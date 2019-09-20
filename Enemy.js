@@ -3,7 +3,8 @@ function Enemy(exemplo){
         color = "dark red",
         tipo = "soldado", //soldado, atirador, mago, necromante, ogre
         vMax = 200,
-        a = 10
+        a = 10,
+        nivel = "Normal"
     } = exemplo;
     Sprite.call(this, exemplo);
     this.color = color;
@@ -15,6 +16,7 @@ function Enemy(exemplo){
     this.a = a;
     this.hp = 2;
     this.maxHp = this.hp;
+    this.nivel = nivel;
     if(this.tipo == "soldado"){
         this.hp = 3;
         this.maxHp = this.hp;
@@ -23,11 +25,30 @@ function Enemy(exemplo){
         this.color = "purple";
         this.hp = 2;
         this.maxHp = this.hp;
+        this.cooldown = 1;
+        this.onCooldown = Math.random();
     }
     else if(this.tipo == "Necromante"){
         this.hp = 2;
         this.maxHp = this.hp;
+        this.cooldown = 2;
+        this.onCooldown = 0.1;
+        this.a *= 5;
     }
+    else if(this.tipo == "Abelha"){
+        this.hp = 1;
+        this.maxHp = 1;
+        this.color = "darkgreen";
+        this.vMax = 400;
+        this.a = 20;
+        this.w = 7;
+        this.h = 7;
+    }
+    if(this.nivel == "Elite"){
+        this.hp *= 10
+        this.maxHp = this.hp;
+    }
+
 }
 Enemy.prototype = new Sprite({});
 Enemy.constructor = Enemy;
@@ -77,7 +98,7 @@ Enemy.prototype.atirar = function(alvo, tirosInimigos){
         w : 10,
         h: 10,
         v: v,
-        color: "black",
+        color: "darkred",
         duration: 3,
         particulasDeRastro: 5,
     });
@@ -87,6 +108,11 @@ Enemy.prototype.atirar = function(alvo, tirosInimigos){
 Enemy.prototype.comportar = function(dt, alvo, tirosInimigos, cena){
     this.onCooldown -= dt;
     if(this.tipo == "soldado"){
+        this.perseguir(alvo)
+    }
+    if(this.tipo == "Abelha"){
+        //vou chamar essa função aqui mas ela deveria estar no "mover" ou no "desenhar"
+        this.color = "rgb(" + this.v.mod/this.vMax *255 + ", 100, " +" 0)";
         this.perseguir(alvo)
     }
     else if(this.tipo == "mago"){
@@ -103,6 +129,28 @@ Enemy.prototype.comportar = function(dt, alvo, tirosInimigos, cena){
             //this.v.mod = this.vMax;
         }
     }
+    else if(this.tipo == "Necromante"){
+
+        if(this.onCooldown < 0 && this.estaDentroDe(cena, this.w)){
+            console.log("hm1");
+            this.v.mod = 0;
+            if(this.tempoVivo < 1)
+                this.spawnarAbelhas(10, cena.inimigos);
+            else
+            this.spawnarAbelhas(7, cena.inimigos);
+            this.onCooldown = this.cooldown;
+        }
+        else if(this.estaDentroDe(cena, this.w)){ //se tirar esse alse ele fica andando de um lado pro outro
+            this.v.mod = 0;
+            console.log("hm2");
+        }
+        else{
+            this.entrarNaAreaVisivel(cena);
+            //this.v.mod = this.vMax;
+            console.log("hm2");
+        }
+    }
+
     
 }
 Enemy.prototype.desenhar = function(ctx){
@@ -116,6 +164,9 @@ Enemy.prototype.desenhar = function(ctx){
     ctx.strokeStyle="black";
     ctx.fillRect(this.x, this.y, this.w, this.h);
     ctx.globalAlpha = 1;
+    if(this.nivel == "Elite"){
+        this.desenhaBarraDeVida(ctx, this.x - 0.5*this.w, this.y + 1.5*this.h, 2* this.w, 0.2* this.h)
+    }
 }
 Enemy.prototype.entrarNaAreaVisivel = function(cena){
     if(!this.estaDentroDe(cena, this.w)){
@@ -129,7 +180,36 @@ Enemy.prototype.estaDentroDe = function(alvo, margem){
     this.y > alvo.y + margem &&
     this.y + this.h < alvo.y + alvo.h - margem)
 }
-
+Enemy.prototype.spawnarAbelhas = function(num, inimigos){
+    if(inimigos)
+        for(var i = 0; i < num; i++){
+            var ini = new Enemy({
+                x: (this.x + (2 - 4*Math.random())*this.w),
+                y: (this.y + (2 - 4*
+                    Math.random())*this.h),
+                //vMax: (1.9 + 0.5*Math.random())*200,
+                tipo: "Abelha",
+                //color: "red",
+                w:15,
+                h:15
+            })
+            inimigos.push(ini);
+        }
+    else{
+        console.log("inimigos é false")
+    }
+}
+Enemy.prototype.morrer = function(cena){
+    if(this.tipo == "Necromante"){
+        for(var i = cena.inimigos.length - 1; i >= 0; i--){
+            console.log(cena);
+            console.log(i)
+            if(cena.inimigos[i].tipo == "Abelha"){
+                cena.inimigos.splice(i, 1);
+            }
+        }
+    }
+}
 
 
 

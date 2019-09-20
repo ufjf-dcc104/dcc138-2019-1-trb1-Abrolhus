@@ -16,6 +16,7 @@ function Scene(params) {
         faseAtual: 0,
         x: 0,
         y: 0,
+        score: 0,
         telaPersonalizada: undefined,
     }
     Object.assign(this, exemplo, params);
@@ -76,6 +77,9 @@ Scene.prototype.desenhar = function(){
     ctx.fillText(this.tempoDeFase.toFixed(2), 10, 20);
     ctx.font = "16px arial black";
     ctx.fillText("Fase " + (this.faseAtual + 1), 10, 40);
+    ctx.fillStyle = "black";
+    ctx.font = "16px monospaced";
+    ctx.fillText("Score: " + (this.score), 10, 60);
 
     this.coisas = [];
     // this.coisas.concat(this.inimigos, this.tiros, this.tirosInimigos, this.particulas, this.char);
@@ -119,6 +123,7 @@ Scene.prototype.mover = function(dt){
         this.char[i].mover(dt, this.mouse, this.particulas, this.tiros);
     }
     for(var i = 0; i<this.inimigos.length; i++){
+        this.inimigos[i].tempoVivo += dt;
         this.inimigos[i].comportar(dt, pc, this.tirosInimigos, this);
         this.inimigos[i].mover(dt);
     }  
@@ -162,8 +167,14 @@ Scene.prototype.checaColisao = function(){
         for(var j=this.inimigos.length - 1; j >= 0; j--){
             if(this.inimigos[j].colidiuCom(this.tiros[i])){
                 this.inimigos[j].hp--;
-                if(this.inimigos[j].hp <= 0)
+                if(this.inimigos[j].hp <= 0){
+                    var cpy = this.inimigos[j]
                     this.inimigos.splice(j, 1);
+                    if(cpy.tipo != "Abelha"){
+                        this.score++;
+                    }
+                    cpy.morrer(this);
+                }
                 this.tiros.splice(i, 1);
                 break
             }

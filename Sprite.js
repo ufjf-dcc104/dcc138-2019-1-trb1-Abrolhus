@@ -17,6 +17,7 @@ function Sprite(exemplo){
     this.tipo = tipo;
     this.color = color;
     this.dir = new Vetor(1,0,1);
+    this.tempoVivo = 0;
 }
 //Sprite.prototype = new Sprite({});
 // Sprite.constructor = Sprite;

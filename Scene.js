@@ -18,6 +18,7 @@ function Scene(params) {
         y: 0,
         score: 0,
         telaPersonalizada: undefined,
+        filtro: undefined,
     }
     Object.assign(this, exemplo, params);
     this.tempoDeFase = 0;
@@ -54,20 +55,16 @@ Scene.prototype.addTiro = function(coisa){
 
 
 Scene.prototype.desenhar = function(){
-    
-    
-    
+    if(this.filtro){
+        this.filtro(this);
+        console.log("tem filtro sssim");
+    }
     if(this.telaPersonalizada){
         this.telaPersonalizada(this);
 
-        // (function(cena){
-        //     cena.ctx.font = "50px Comic Sans MS"
-        //     cena.ctx.textAlign = "center"
-        //     cena.ctx.fillStyle = "orange"
-        //     cena.ctx.fillText("Acabou-se", cena.x + cena.w/2, cena.y + cena.h/2)
-        //     }) (this);
         return;
     }
+    
     ctx.fillStyle= "tan";
     ctx.strokeStyle="black";
     ctx.fillRect(0, 0, this.w, this.h);
@@ -283,7 +280,22 @@ Scene.prototype.iniciaFase = function(num){ // inicia a fase "num"
         }
         else if(evt.tipo == "tela"){
             console.log(evt.conteudo);
-            cena.telaPersonalizada = evt.conteudo;
+            
+            cena.eventos.push({
+                t: evt.t,
+                active: function(cena){
+                    cena.telaPersonalizada = evt.conteudo;
+                }
+            });
+        }
+        else if(evt.tipo == "filtro"){
+            cena.eventos.push({
+                t: evt.t,
+                active: function(cena){
+                    cena.filtro = evt.conteudo;
+                }
+            });
+            
         }
     }) (this);
 

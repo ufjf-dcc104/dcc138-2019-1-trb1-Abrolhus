@@ -51,15 +51,6 @@ function Fases(){
                     x:(1 +0.25*Math.random())*canvas.width,
                     y:Math.random()*canvas.height,
                     vMax: (0.9 + 0.5*Math.random())*200,
-                    tipo: "mago",
-                    color: "purple",
-                    w:15,
-                    h:15
-                },
-                { 
-                    x:(1 +0.25*Math.random())*canvas.width,
-                    y:Math.random()*canvas.height,
-                    vMax: (0.9 + 0.5*Math.random())*200,
                     tipo: "soldado",
                     color: "red",
                     w:15,
@@ -182,24 +173,6 @@ function Fases(){
                         w:15,
                         h:15
                     },
-                    { 
-                        x:(1 +0.25*Math.random())*canvas.width,
-                        y:Math.random()*canvas.height,
-                        vMax: (0.9 + 0.5*Math.random())*200,
-                        tipo: "mago",
-                        color: "purple",
-                        w:15,
-                        h:15
-                    },
-                    { 
-                        x:(1 +0.25*Math.random())*canvas.width,
-                        y:Math.random()*canvas.height,
-                        vMax: (0.9 + 0.5*Math.random())*200,
-                        tipo: "mago",
-                        color: "purple",
-                        w:15,
-                        h:15
-                    },
     
     
                 ]
@@ -304,21 +277,30 @@ function Fases(){
                 w:15,
                 h:15
             },
-            {
-                x: (-0.45*Math.random())*canvas.width,
-                y: (-0.3*Math.random())*canvas.height,
-                vMax: (1.9 + 0.5*Math.random())*200,
-                tipo: "soldado",
-                color: "red",
+            { 
+                x:(1 +0.25*Math.random())*canvas.width,
+                y:Math.random()*canvas.height,
+                vMax: (0.9 + 0.5*Math.random())*200,
+                tipo: "mago",
+                color: "purple",
                 w:15,
                 h:15
             },
-            {
-                x: (-0.35*Math.random())*canvas.width,
-                y: (-0.3*Math.random())*canvas.height,
-                vMax: (1.9 + 0.5*Math.random())*200,
-                tipo: "soldado",
-                color: "red",
+            { 
+                x:(1 +0.25*Math.random())*canvas.width,
+                y:Math.random()*canvas.height,
+                vMax: (0.9 + 0.5*Math.random())*200,
+                tipo: "mago",
+                color: "purple",
+                w:15,
+                h:15
+            },
+            { 
+                x:(1 +0.25*Math.random())*canvas.width,
+                y:Math.random()*canvas.height,
+                vMax: (0.9 + 0.5*Math.random())*200,
+                tipo: "mago",
+                color: "purple",
                 w:15,
                 h:15
             },

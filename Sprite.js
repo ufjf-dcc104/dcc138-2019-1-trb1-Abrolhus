@@ -58,6 +58,24 @@ Sprite.prototype.desenhaBarraDeVida = function(ctx, x,y,w,h){
     }
     ctx.restore();
 }
+Sprite.prototype.desenhaTriangulo = function(ctx, x1, y1, x2, y2, x3, y3){
+    ctx.save()
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.lineTo(x3, y3);
+    ctx.closePath();
+    
+    // the outline
+    ctx.lineWidth = 10;
+    ctx.strokeStyle = '#666666';
+    ctx.stroke();
+    
+    // the fill color
+    ctx.fillStyle = "#FFCC00";
+    ctx.fill();
+    ctx.restore()
+}
 
 
 

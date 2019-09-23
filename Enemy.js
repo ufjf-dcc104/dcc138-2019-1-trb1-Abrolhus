@@ -39,7 +39,7 @@ function Enemy(exemplo){
         this.hp = 1;
         this.maxHp = 1;
         this.color = "darkgreen";
-        this.vMax = 400;
+        this.vMax = 300; 
         this.a = 20;
         this.w = 7;
         this.h = 7;
@@ -132,12 +132,14 @@ Enemy.prototype.comportar = function(dt, alvo, tirosInimigos, cena){
     else if(this.tipo == "Necromante"){
 
         if(this.onCooldown < 0 && this.estaDentroDe(cena, this.w)){
-            console.log("hm1");
+            //console.log("hm1");
             this.v.mod = 0;
-            console.log(this.hp/this.maxHp < 0.2)
-            if(this.tempoVivo < 1)
+            console.log(this.hp/this.maxHp)
+            if(this.tempoVivo < 1){
+            
                 this.spawnarAbelhas(10, cena.inimigos);
-            else if(this.hp/this.maxHp < 0.2){
+            }
+                else if(this.hp/this.maxHp < 0.2){
                 console.log("uai2")
                 this.spawnarAbelhas(20, cena.inimigos);
             }
@@ -147,12 +149,10 @@ Enemy.prototype.comportar = function(dt, alvo, tirosInimigos, cena){
         }
         else if(this.estaDentroDe(cena, this.w)){ //se tirar esse alse ele fica andando de um lado pro outro
             this.v.mod = 0;
-            console.log("hm2");
         }
         else{
             this.entrarNaAreaVisivel(cena);
             //this.v.mod = this.vMax;
-            console.log("hm2");
         }
     }
 
@@ -201,14 +201,12 @@ Enemy.prototype.spawnarAbelhas = function(num, inimigos){
             inimigos.push(ini);
         }
     else{
-        console.log("inimigos é false")
+        ;
     }
 }
 Enemy.prototype.morrer = function(cena){
     if(this.tipo == "Necromante"){
         for(var i = cena.inimigos.length - 1; i >= 0; i--){
-            console.log(cena);
-            console.log(i)
             if(cena.inimigos[i].tipo == "Abelha"){
                 cena.inimigos.splice(i, 1);
             }

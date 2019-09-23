@@ -258,7 +258,6 @@ Scene.prototype.eventHandler = function(){
     }
 }
 Scene.prototype.iniciaFase = function(num){ // inicia a fase "num"
-    console.log("uai")
     this.tempoDeFase = 0;
     this.eventos = [];
     for(var i = 0; i < this.fases[num].eventos.length; i++){
